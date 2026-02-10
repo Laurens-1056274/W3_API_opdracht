@@ -1,3 +1,4 @@
 json load: https://www.geeksforgeeks.org/python/json-load-in-python/
 enforcing Foreign keys (database): https://sqlite.org/foreignkeys.html
 making relational links (database): 
+flask sessions: https://www.geeksforgeeks.org/python/python-flask-request-object/
