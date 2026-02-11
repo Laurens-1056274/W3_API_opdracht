@@ -1,17 +1,40 @@
 <!doctype html>
 <html lang="en">
-    <head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    </head>
-        <body>
-        <form action="/check_gebruiker" method="post">
-            <div class="login_page">
-                <input type="text" placeholder="uw naam" name="gebruikersnaam" id="gebruikersnaam" required />
-                <input type="id" placeholder="uw gebruikers id" name="ID" id="ID" required />
-                <button type="submit">Login</button>
-            </div>
-        </form>
-    </body>
+    <link rel="stylesheet" href="static/login_scherm.css" />
+  </head>
+  <body>
+    <div class="frogg">
+      <form action="/check_gebruiker" method="post">
+        <div class="login_page">
+          <ul>
+            <li>
+              <input
+                type="text"
+                placeholder="uw naam"
+                name="gebruikersnaam"
+                id="gebruikersnaam"
+                required
+              />
+            </li>
+            <li>
+              <input
+                type="id"
+                placeholder="uw gebruikers id"
+                name="ID"
+                id="ID"
+                required
+              />
+            </li>
+            <li>
+              <button type="submit">Login</button>
+            </li>
+          </ul>
+        </div>
+      </form>
+    </div>
+  </body>
 </html>
