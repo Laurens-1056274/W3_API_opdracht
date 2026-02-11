@@ -11,10 +11,6 @@ def hello_world():
     session.clear()
     return 'De server draait nu'
 
-@app.route('/inzicht')
-def inzicht_leerling():
-    return render_template("leerling/inzicht_onderwerp_leerling.html")
-
 @app.route('/login')
 def login():
     return render_template("systeem/login.html")
