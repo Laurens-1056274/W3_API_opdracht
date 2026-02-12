@@ -5,6 +5,7 @@ app = Flask(__name__)
 
 # secrect key is needed to run sessions, so you can't just remove this line (It also cant be empty)
 app.secret_key = "_"
+invalid_user = False
 
 @app.route('/')
 def hello_world():
@@ -13,7 +14,7 @@ def hello_world():
 
 @app.route('/login')
 def login():
-    return render_template("systeem/login.html")
+    return render_template("systeem/login.html", invalid_user=invalid_user)
 
 @app.route('/check_gebruiker', methods=['GET', 'POST'])
 def check_gebruiker():
@@ -26,7 +27,8 @@ def check_gebruiker():
         # If user_exist send to the page listed beneath
         return redirect("/")
     # user does noet exist, make user redo the login
-    return redirect('/login')
+    invalid_user = True
+    return render_template("systeem/login.html", invalid_user=invalid_user)
 
 if __name__ == '__main__':
     app.run(debug=True)
