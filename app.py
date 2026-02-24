@@ -1,5 +1,6 @@
 from flask import Flask,redirect,render_template,session,request
-from login_check import search_user
+from SQL_queries.login_check import search_user
+from SQL_queries.get_student_data import *
 
 app = Flask(__name__)
 
@@ -44,10 +45,17 @@ def check_gebruiker():
 
 @app.route('/leerling/kernwoord_en_onderwerp', methods=['GET', 'POST'])
 def leerling_kernwoord_en_onderwerp():
+    # Check if user is logged in, else go to error page
     try:
-        return render_template('leerling/kernwoord_en_onderwerp.html',user_type=session["typeUser"])
+        session["typeUser"] = session["typeUser"]
     except:
         return redirect('/error_page')
+    list_all_data = []
+    for entry in GetStudentData().collect_entries(session['gebruikers id']):
+        entry_id = entry[0]
+        learning_goals_id = GetStudentData().learning_goal_id(entry_id)
+        list_all_data.append(learning_goals_id)
+    return render_template('leerling/kernwoord_en_onderwerp.html',user_type=session["typeUser"], name=session['gebruikersnaam'], data=list_all_data)
 
 if __name__ == '__main__':
     app.run(debug=True)
