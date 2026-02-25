@@ -65,7 +65,7 @@ class GetStudentData:
         cur = con.cursor()
 
         cur.execute("""
-        SELECT id, subject_id
+        SELECT id
         FROM entries
         WHERE student_id = ?
         """, (student_id,))

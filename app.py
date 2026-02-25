@@ -57,34 +57,39 @@ def leerling_kernwoord_en_onderwerp():
     list_all_snapshot_id = []
     list_all_snapshot_taxonomy = []
     list_all_learning_goal_title = []
-    entries = student_data.collect_entries(session['gebruikers id'])
 
+    entries = student_data.collect_entries(session['gebruikers id'])
+    print("entries", entries)
     for entry in entries:
         entry_id = entry[0]
 
-        learning_goal_id_list = student_data.learning_goal_id(entry_id)
+    learning_goal_id_list = student_data.learning_goal_id(entry_id)
+    print("learning_goal_id_list", learning_goal_id_list)
+    for learning_goal in learning_goal_id_list:
+        learning_goal_id = learning_goal[0]
+        list_all_learning_goal_id.append(learning_goal_id)
 
-        for learning_goal in learning_goal_id_list:
-            learning_goal_id = learning_goal[0]
-            list_all_learning_goal_id.append(learning_goal_id)
+    learning_goal_title_list = student_data.learning_goal_title(learning_goal_id)
+    print("learning_goal_title_list", learning_goal_title_list)
+    for title in learning_goal_title_list:
+        learning_goal_title = title[0]
+        list_all_learning_goal_title.append(learning_goal_title)
 
-            learning_goal_title_list = student_data.learning_goal_title(learning_goal_id)
+    snapshot_id_list = student_data.snapshot_id(learning_goal_id)
+    print("snapshot_id_list", snapshot_id_list)
+    for snapshot in snapshot_id_list:
+        snapshot_id = snapshot[0]
+        list_all_snapshot_id.append(snapshot_id)
 
-            for title in learning_goal_title_list:
-                learning_goal_title = title[0]
-                list_all_learning_goal_title.append(learning_goal_title)
+    taxonomy_data = student_data.snapshot_taxonomy(snapshot_id)
+    print("taxonomy_data", taxonomy_data)
+    for taxonomy_row in taxonomy_data:
+        list_all_snapshot_taxonomy.append(taxonomy_row)
 
-                snapshot_id_list = student_data.snapshot_id(learning_goal_id)
-
-                for snapshot in snapshot_id_list:
-                    snapshot_id = snapshot[0]
-                    list_all_snapshot_id.append(snapshot_id)
-
-                    taxonomy_data = student_data.snapshot_taxonomy(snapshot_id)
-                    for taxonomy_row in taxonomy_data:
-                        list_all_snapshot_taxonomy.append(taxonomy_row)
-
-    return render_template('leerling/kernwoord_en_onderwerp.html',user_type=session["typeUser"], name=session['gebruikersnaam'], data=list_all_learning_goal_title)
+    return render_template('leerling/kernwoord_en_onderwerp.html',
+                           user_type=session["typeUser"], name=session['gebruikersnaam'], learning_goal_title=list_all_learning_goal_title, 
+                           snapshot_taxonomy = list_all_snapshot_taxonomy
+                           )
 
 if __name__ == '__main__':
     app.run(debug=True)
