@@ -50,6 +50,22 @@
                 <div class="page-subtitle">Welcome back.</div>
             </div>
         </div>
+        <!--type selector-->
+    <div style="width:200px; margin: 20px auto; text-align:center;">
+      <label for="chartTypeSelect">Kies type:</label>
+      <select id="chartTypeSelect">
+        <option value="quiz">Quiz</option>
+        <option value="project">Project</option>
+        <option value="test">Test</option>
+        <option value="observatie">Observatie</option>
+      </select>
+    </div>
+
+
+        <div class="chart-container" style="width: 90%; max-width: 1000px; margin: 40px auto; height: 400px;">
+    <canvas id="myChart"></canvas>
+</div>
+        <script src="Dashboard.js"></script>
     </div>
 </div>
 
