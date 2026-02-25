@@ -59,6 +59,22 @@ class GetStudentData:
         result = cur.fetchall()
         con.close()
         return result
+    
+    
+    def learning_goal_keyword(self, learning_goal_id):
+        con = sqlite3.connect("database.db")
+        cur = con.cursor()
+
+        cur.execute("""
+        SELECT keyword
+        FROM learning_goal_keywords
+        WHERE learning_goal_id = ?
+        """, (learning_goal_id,))
+
+        result = cur.fetchall()
+        con.close()
+        return result
+    
 
     def collect_entries(self, student_id):
         con = sqlite3.connect("database.db")
