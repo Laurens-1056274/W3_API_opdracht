@@ -1,6 +1,7 @@
 from flask import Flask,redirect,render_template,session,request
 from SQL_queries.login_check import search_user
 from SQL_queries.get_student_data import *
+import statistics
 
 app = Flask(__name__)
 
@@ -61,50 +62,78 @@ def leerling_kernwoord_en_onderwerp():
     list_all_snapshot_taxonomy = []
     list_all_learning_goal_title = []
     list_all_goal_keyword_list = []
+    count = 0
+    list_all_analyseren = []
+    list_all_begrijpen = []
+    list_all_onthouden = []
+    list_all_toepassen = []
+    average_analyse = []
 
     entries = student_data.collect_entries(session['gebruikers id'])
-    print("entries", entries)
-
     for entry in entries:
         entry_id = entry[0]
         list_all_entries_id.append(entry_id)
 
         learning_goal_id_list = student_data.learning_goal_id(entry_id)
-        print("learning_goal_id_list", learning_goal_id_list)
-
         for learning_goal in learning_goal_id_list:
             learning_goal_id = learning_goal[0]
             list_all_learning_goal_id.append(learning_goal_id)
 
             learning_goal_title_list = student_data.learning_goal_title(learning_goal_id)
-            print("learning_goal_title_list", learning_goal_title_list)
-
             for title in learning_goal_title_list:
                 learning_goal_title = title[0]
                 list_all_learning_goal_title.append(learning_goal_title)
 
-
             learning_goal_keyword = student_data.learning_goal_keyword(learning_goal_id)
-            print("learning_goal_keyword_list", learning_goal_keyword)
-
             for keyword in learning_goal_keyword:
                 learning_keyword_title = keyword[0]
                 list_all_goal_keyword_list.append(learning_keyword_title)
 
-
             snapshot_id_list = student_data.snapshot_id(learning_goal_id)
-            print("snapshot_id_list", snapshot_id_list)
-
             for snapshot in snapshot_id_list:
                 snapshot_id = snapshot[0]
                 list_all_snapshot_id.append(snapshot_id)
 
                 taxonomy_data = student_data.snapshot_taxonomy(snapshot_id)
-                print("taxonomy_data", taxonomy_data)
-
                 for taxonomy_row in taxonomy_data:
                     list_all_snapshot_taxonomy.append(taxonomy_row)
+                    if taxonomy_row[0] == "Analyseren":
+                        list_all_analyseren.append(taxonomy_row[1:5])
+                    elif taxonomy_row[0] == "Begrijpen":
+                        list_all_begrijpen.append(taxonomy_row[1:5])
+                    elif taxonomy_row[0] == "Onthouden":
+                        list_all_onthouden.append(taxonomy_row[1:5])
+                    else:
+                        list_all_toepassen.append(taxonomy_row[1:5])
 
+                    count+=1
+        print(list_all_analyseren)
+        count = 0
+        analyseren_average_kennen = []
+        for _ in (list_all_analyseren):
+            analyseren_average_kennen.append(list_all_analyseren[count][0])
+            count+= 1
+        average_analyse.append((statistics.mean(analyseren_average_kennen)))
+        count = 0
+        analyseren_average_kunnen = []
+        for _ in (list_all_analyseren):
+            analyseren_average_kunnen.append(list_all_analyseren[count][1])
+            count+= 1
+        average_analyse.append((statistics.mean(analyseren_average_kunnen)))
+        count = 0
+        analyseren_average_confidence = []
+        for _ in (list_all_analyseren):
+            analyseren_average_confidence.append(list_all_analyseren[count][2])
+            count+= 1
+        average_analyse.append((statistics.mean(analyseren_average_confidence)))
+        print(average_analyse)
+  
+    
+        # print(list_all_begrijpen)
+
+        # print(list_all_onthouden)
+
+        # print(list_all_toepassen) 
         return render_template('leerling/kernwoord_en_onderwerp.html', user_type=session["typeUser"], name=session['gebruikersnaam'], learning_goal_title=list_all_learning_goal_title,  snapshot_taxonomy = list_all_snapshot_taxonomy, keyword = list_all_goal_keyword_list)
 
 if __name__ == '__main__':
