@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inlogpagina</title>
+    <link rel="stylesheet" href="static/login_scherm.css" />
+  </head>
+  <body>
+      <form action="/check_gebruiker" method="post">
+        <div class="login_page">
+          {%if invalid_user==True%}<p>Gebruiker bestaat niet, probeer opnieuw</p>{%endif%}
+          <ul>
+            <li>
+              <input
+                type="text"
+                placeholder="uw naam"
+                name="gebruikersnaam"
+                id="gebruikersnaam"
+                required
+                {%if invalid_user==True%}style="background-color:Tomato"{%endif%}
+              />
+            </li>
+            <li>
+              <input
+                type="text"
+                placeholder="uw gebruikers id"
+                name="ID"
+                id="ID"
+                required
+                {%if invalid_user==True%}style="background-color:Tomato"{%endif%}
+              />
+            </li>
+            <li>
+              <button type="submit">Login</button>
+            </li>
+          </ul>
+        </div>
+      </form>
+  </body>
+</html>
