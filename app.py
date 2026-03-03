@@ -11,6 +11,10 @@ invalid_user = False
 def landlingpage():
     return render_template("landingpage.html")
 
+@app.route('/studentdashboard')
+def studentdashboard():
+    return render_template("pages/leerling/studentdashboard.html")
+
 @app.route('/login')
 def login():
     return render_template("systeem/login.html", invalid_user=invalid_user)
