@@ -1,5 +1,6 @@
 import json
 import sqlite3
+import random
 
 with open("data-sample-small.json", "r") as f:
     data = json.load(f)
@@ -17,12 +18,19 @@ DROP TABLE IF EXISTS entry_learning_goals;
 DROP TABLE IF EXISTS learning_goals;
 DROP TABLE IF EXISTS entry_taxonomy_scale;
 DROP TABLE IF EXISTS entries;
+DROP TABLE IF EXISTS teachers;
 DROP TABLE IF EXISTS students;
 DROP TABLE IF EXISTS subjects;
 
+CREATE TABLE teachers (
+  id INTEGER PRIMARY KEY,
+  naam TEXT NOT NULL
+);
+
 CREATE TABLE students (
   id INTEGER PRIMARY KEY,
-  name TEXT NOT NULL
+  name TEXT NOT NULL,
+  klas TEXT NOT NULL
 );
 
 CREATE TABLE subjects (
@@ -108,6 +116,13 @@ def get_source_id(source_type, external_id):
 
 
 with con:
+    cur.execute("SELECT COUNT(*) FROM teachers")
+    if cur.fetchone()[0] == 0:
+        cur.execute(
+            "INSERT INTO teachers(id, naam) VALUES(?, ?)",
+            (1, "John"),
+        )
+
     for entry in data.get("entries", []):
         student = entry.get("student") or {}
         subject = entry.get("subject") or {}
@@ -115,10 +130,14 @@ with con:
         student_id = int(student.get("id"))
         subject_id = int(subject.get("id"))
 
+        klas = student.get("klas")
+        if not klas:
+            klas = random.choice(["1A", "1B", "1C"])
+
         cur.execute(
-            "INSERT INTO students(id, name) VALUES(?, ?) "
-            "ON CONFLICT(id) DO UPDATE SET name=excluded.name",
-            (student_id, student.get("name") or ""),
+            "INSERT INTO students(id, name, klas) VALUES(?, ?, ?) "
+            "ON CONFLICT(id) DO UPDATE SET name=excluded.name, klas=excluded.klas",
+            (student_id, student.get("name") or "", klas),
         )
 
         cur.execute(
@@ -183,4 +202,3 @@ with con:
                     )
 
 con.close()
-
