@@ -1,74 +1,87 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="nl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leerling Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <link rel="stylesheet" href="Dashboard_Leerling.css">
-</head>
-<body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Leerling Dashboard</title>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+		/>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static', filename='studentdashboard.css') }}"
+		/>
+	</head>
+	<body>
+		<div class="container">
+			<!--sidebar-->
+			<div class="sidebar">
+				<div class="logo">
+					<h1>Leerling<span>Dashboard</span></h1>
+				</div>
+				<div class="nav-menu">
+					<div class="menu-heading">Main</div>
+					<div class="nav-item active">
+						<i class="fa fa-bars"></i>
+						<span>Home</span>
+					</div>
+					<div class="nav-item">
+						<i class="fa fa-chart-bar"></i>
+						<span>Voortgang</span>
+					</div>
+					<div class="nav-item">
+						<i class="fa fa-pencil-alt"></i>
+						<span>Leerdoelen</span>
+					</div>
+					<div class="nav-item">
+						<i class="fa fa-user-circle"></i>
+						<span>Profiel</span>
+					</div>
+					<div class="nav-item">
+						<i class="fa fa-sign-out-alt"></i>
+						<span>Uitloggen</span>
+					</div>
+				</div>
+			</div>
 
-<div class="container">
+			<!--main content-->
+			<div class="main-content">
+				<div class="header">
+					<div class="page-title">
+						<h1>Dashboard</h1>
+					<div class="page-subtitle">Welkom terug, {{ name }}.</div>
+					</div>
+				</div>
+				<!--type selector-->
+				<div style="width: 200px; margin: 20px auto; text-align: center">
+					<label for="chartTypeSelect">Kies type:</label>
+					<select id="chartTypeSelect">
+						<option value="all" selected>Alles</option>
+						<option value="quiz">Quiz</option>
+						<option value="project">Project</option>
+						<option value="test">Test</option>
+						<option value="observatie">Observatie</option>
+					</select>
+				</div>
 
-    <!--sidebar-->
-    <div class="sidebar">
-        <div class="logo">
-            <h1>Leerling<span>Dashboard</span></h1>
-        </div>
-        <div class="nav-menu">
-            <div class="menu-heading">Main</div>
-            <div class="nav-item active">
-                <i class="fa fa-bars"></i>
-                <span>Home</span>
-            </div>
-            <div class="nav-item">
-                <i class="fa fa-chart-bar"></i>
-                <span>Voortgang</span>
-            </div>
-            <div class="nav-item">
-                <i class="fa fa-pencil-alt"></i>
-                <span>Leerdoelen</span>
-            </div>
-            <div class="nav-item">
-                <i class="fa fa-user-circle"></i>
-                <span>Profiel</span>
-            </div>
-            <div class="nav-item">
-                <i class="fa fa-sign-out-alt"></i>
-                <span>Uitloggen</span>
-            </div>
-        </div>
-    </div>
-
-    <!--main content-->
-    <div class="main-content">
-        <div class="header">
-            <div class="page-title">
-                <h1>Dashboard</h1>
-                <div class="page-subtitle">Welcome back.</div>
-            </div>
-        </div>
-        <!--type selector-->
-    <div style="width:200px; margin: 20px auto; text-align:center;">
-      <label for="chartTypeSelect">Kies type:</label>
-      <select id="chartTypeSelect">
-        <option value="quiz">Quiz</option>
-        <option value="project">Project</option>
-        <option value="test">Test</option>
-        <option value="observatie">Observatie</option>
-      </select>
-    </div>
-
-
-        <div class="chart-container" style="width: 90%; max-width: 1000px; margin: 40px auto; height: 400px;">
-    <canvas id="myChart"></canvas>
-</div>
-        <script src="Dashboard.js"></script>
-    </div>
-</div>
-
-
-</body>
+				<div
+					class="chart-container"
+					style="
+						width: 90%;
+						max-width: 1000px;
+						margin: 40px auto;
+						height: 400px;
+					"
+				>
+					<canvas id="myChart"></canvas>
+				</div>
+				<script>
+					const STUDENT_ID = {{ student_id | int }};
+				</script>
+				<script src="{{ url_for('static', filename='studentdashboard.js') }}"></script>
+			</div>
+		</div>
+	</body>
 </html>
