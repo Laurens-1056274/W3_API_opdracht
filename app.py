@@ -1,7 +1,6 @@
-from get_student_data import GetStudentData
+from SQL_queries.get_student_data import GetStudentData
+from SQL_queries.login_check import search_user
 from flask import Flask, jsonify, redirect, render_template, session, request
-from login_check import search_user
-
 
 app = Flask(__name__)
 
