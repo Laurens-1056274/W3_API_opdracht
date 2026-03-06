@@ -48,7 +48,7 @@ def check_gebruiker():
     user_exists = search_user(session['gebruikersnaam'],session['gebruikers id']).search_leerling()
     if user_exists:
         # If user_exist send to the page listed beneath
-        return redirect("/")
+        return redirect("/studentdashboard")
     # user does noet exist, make user redo the login
     invalid_user = True
     return render_template("systeem/login.html", invalid_user=invalid_user)
