@@ -2,11 +2,11 @@ from get_student_data import GetStudentData
 from flask import Flask, jsonify, redirect, render_template, session, request
 from login_check import search_user
 
+
 app = Flask(__name__)
 
 # secrect key is needed to run sessions, so you can't just remove this line (It also cant be empty)
 app.secret_key = "_"
-invalid_user = False
 
 @app.route('/')
 def landlingpage():
@@ -37,7 +37,17 @@ def api_student_voortgang():
 
 @app.route('/login')
 def login():
-    return render_template("systeem/login.html", invalid_user=invalid_user)
+    return render_template("systeem/login.html", invalid_user=False)
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/')
+
+@app.route('/error_page')
+def error_page():
+    return render_template("/systeem/error_page.html")
+
 
 @app.route('/check_gebruiker', methods=['GET', 'POST'])
 def check_gebruiker():
@@ -50,8 +60,23 @@ def check_gebruiker():
         # If user_exist send to the page listed beneath
         return redirect("/studentdashboard")
     # user does noet exist, make user redo the login
-    invalid_user = True
-    return render_template("systeem/login.html", invalid_user=invalid_user)
+    return render_template("systeem/login.html", invalid_user=True)
+
+
+@app.route('/leerling/kernwoord_en_onderwerp', methods=['GET', 'POST'])
+def leerling_kernwoord_en_onderwerp():
+    # Check if user is logged in, else go to error page
+    try:
+        student_data = GetStudentData()
+        learning_goals = student_data.get_learning_goal_overview(session["gebruikers id"])
+    except:
+        return redirect('/error_page')
+    
+
+    return render_template(
+        "leerling/kernwoord_en_onderwerp.html",
+        name=session["gebruikersnaam"],
+        learning_goals=learning_goals)
 
 if __name__ == '__main__':
     app.run(debug=True)
