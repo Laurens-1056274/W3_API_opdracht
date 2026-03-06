@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS subjects;
 
 CREATE TABLE teachers (
   id INTEGER PRIMARY KEY,
-  naam TEXT NOT NULL
+  name TEXT NOT NULL
 );
 
 CREATE TABLE students (
@@ -119,7 +119,7 @@ with con:
     cur.execute("SELECT COUNT(*) FROM teachers")
     if cur.fetchone()[0] == 0:
         cur.execute(
-            "INSERT INTO teachers(id, naam) VALUES(?, ?)",
+            "INSERT INTO teachers(id, name) VALUES(?, ?)",
             (1, "John"),
         )
 
