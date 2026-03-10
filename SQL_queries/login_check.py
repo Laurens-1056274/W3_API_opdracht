@@ -17,3 +17,15 @@ class search_user:
       result = False
     cur.close()
     return result
+  
+  def search_docent(self):
+    con = sqlite3.connect("database.db")
+    cur = con.cursor()
+    cur.execute('SELECT name,id FROM TEACHERS WHERE name = ? AND id = ?', (self.gebruikersnaam,self.ID))
+    result = cur.fetchall()
+    if len(result) == 1:
+      result = True
+    else:
+      result = False
+    cur.close()
+    return result

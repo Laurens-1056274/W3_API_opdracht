@@ -3,12 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Inlogpagina</title>
+    <title>Inlogpagina {{user}}</title>
     <link rel="stylesheet" href="static/login_scherm.css" />
   </head>
   <body>
       <form action="/check_gebruiker" method="post">
         <div class="login_page">
+          {%if user=="leerling"%}<p>log in als leerling</p>{%endif%}
+          {%if user=="docent"%}<p>log in als docent</p>{%endif%}
           {%if invalid_user==True%}<p>Gebruiker bestaat niet, probeer opnieuw</p>{%endif%}
           <ul>
             <li>
@@ -32,7 +34,7 @@
               />
             </li>
             <li>
-              <button type="submit">Login</button>
+              <button {%if user=="leerling"%}style="background-color: green;"{%endif%} type="submit">Login</button>
             </li>
           </ul>
         </div>
