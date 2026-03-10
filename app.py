@@ -9,9 +9,8 @@ app = Flask(__name__)
 app.secret_key = "_"
 
 @app.route('/')
-def hello_world():
-    session.clear()
-    return 'De server draait nu'
+def landlingpage():
+    return render_template("landingpage.html")
 
 @app.route('/login')
 def login():
