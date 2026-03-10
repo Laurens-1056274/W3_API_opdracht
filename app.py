@@ -1,7 +1,6 @@
-from flask import Flask,redirect,render_template,session,request
+from SQL_queries.get_student_data import GetStudentData
 from SQL_queries.login_check import search_user
-from SQL_queries.get_student_data import *
-import statistics
+from flask import Flask, jsonify, redirect, render_template, session, request
 
 app = Flask(__name__)
 
@@ -11,6 +10,29 @@ app.secret_key = "_"
 @app.route('/')
 def landlingpage():
     return render_template("landingpage.html")
+
+@app.route('/studentdashboard')
+def studentdashboard():
+    if not session.get('gebruikers id'):
+        return redirect('/login')
+    return render_template(
+        "pages/leerling/studentdashboard.html",
+        name=session.get('gebruikersnaam'),
+        student_id=session.get('gebruikers id'),
+    )
+
+@app.route('/api/student/voortgang')
+def api_student_voortgang():
+    student_id = session.get('gebruikers id')
+    if not student_id:
+        return jsonify({"error": "Niet ingelogd"}), 401
+    try:
+        db = GetStudentData()
+        learning_goals = db.get_learning_goal_overview(int(student_id))
+        db.close()
+        return jsonify({"learningGoals": learning_goals})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/login')
 def login():
@@ -34,9 +56,8 @@ def check_gebruiker():
     session['gebruikers id'] = ID
     user_exists = search_user(session['gebruikersnaam'],session['gebruikers id']).search_leerling()
     if user_exists:
-        # If user_exist send to the page listed beneath (atm only students exist)
-        session["typeUser"] = "leerling"
-        return redirect("/leerling/kernwoord_en_onderwerp")
+        # If user_exist send to the page listed beneath
+        return redirect("/studentdashboard")
     # user does noet exist, make user redo the login
     return render_template("systeem/login.html", invalid_user=True)
 
