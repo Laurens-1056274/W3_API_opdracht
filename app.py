@@ -34,12 +34,25 @@ def api_student_voortgang():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/login')
-def login():
-    return render_template("systeem/login.html", invalid_user=False)
 
-@app.route('/logout')
+@app.route('/login_leerling')
+def login_leerling():
+    session["user type"] = "leerling"
+    return render_template("systeem/login.html", invalid_user=False, user=session["user type"])
+
+@app.route('/login_docent')
+def login_docent():
+    session["user type"] = "docent"
+    return render_template("systeem/login.html", invalid_user=False, user=session["user type"])
+
+@app.route("/logout")
 def logout():
+    return render_template("systeem/uitloggen.html", 
+                           page_title="confirmatie uitloggen", 
+                           description="Pagina om uit te loggen, klik op de uitloggen knop om uit te loggen.")
+
+@app.route('/clear_session')
+def clear_session():
     session.clear()
     return redirect('/')
 
@@ -47,19 +60,35 @@ def logout():
 def error_page():
     return render_template("/systeem/error_page.html")
 
-
 @app.route('/check_gebruiker', methods=['GET', 'POST'])
 def check_gebruiker():
     gebruikersnaam = request.form.get("gebruikersnaam")
     ID = request.form.get("ID")
     session['gebruikersnaam'] = gebruikersnaam
     session['gebruikers id'] = ID
-    user_exists = search_user(session['gebruikersnaam'],session['gebruikers id']).search_leerling()
-    if user_exists:
-        # If user_exist send to the page listed beneath
-        return redirect("/studentdashboard")
-    # user does noet exist, make user redo the login
-    return render_template("systeem/login.html", invalid_user=True)
+    if session["user type"] == "leerling":
+        user_exists = search_user(session['gebruikersnaam'],session['gebruikers id']).search_leerling()
+        if user_exists:
+            return redirect("/studentdashboard")
+
+    elif session["user type"] == "docent" :
+        user_exists = search_user(session['gebruikersnaam'],session['gebruikers id']).search_docent()
+        if user_exists:
+            return redirect("docent/voorbeeld")
+    
+
+    return render_template("systeem/login.html", invalid_user=True, user=session["user type"])
+
+
+# Deze flask route doet niks, het bestaat alleen om te testen of de login werkt
+@app.route('/docent/voorbeeld')
+def docent_voorbeeld():
+    try:
+        print(session["gebruikersnaam"])
+    except:
+        return redirect('/error_page')
+        
+    return render_template("/pages/docent/test.html")
 
 
 @app.route('/leerling/kernwoord_en_onderwerp', methods=['GET', 'POST'])

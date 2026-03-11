@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  
+  <body>
+    <h2 style="text-align:center" class="subtitle">Weet u zeker dat u uit wilt loggen?</h2>
+
+    <form action="{{ url_for('clear_session') }}">
+      <button type="submit" class="yes">Uitloggen</button>
+    </form>
+
+    <style scoped>
+      button {
+        width: 100%;
+        padding: 0.9em;
+        font-size: 1rem;
+        font-weight: 600;
+        background: #0077cc;
+        color: #ffffff;     
+        }
+      body {
+          background: #f4f6f9;
+      }
+
+    </style>
+  </body>
+</html>
