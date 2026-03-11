@@ -102,7 +102,7 @@ def leerling_kernwoord_en_onderwerp():
     
 
     return render_template(
-        "leerling/kernwoord_en_onderwerp.html",
+        "pages/leerling/kernwoord_en_onderwerp.html",
         name=session["gebruikersnaam"],
         learning_goals=learning_goals)
 

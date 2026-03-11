@@ -191,3 +191,12 @@ body {
   width: 100% !important;
   height: 100% !important;
 }
+
+a {
+  color: inherit;
+  text-decoration: none;
+  cursor: inherit;
+  all: unset;
+  display: inline;
+}
+
