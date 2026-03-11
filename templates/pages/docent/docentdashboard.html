@@ -1,68 +1,78 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "systeem/base.html" %} {% block content %}
 <!-- Docent Dashboard Content -->
-<div class="dashboard-container">
-            <!--sidebar-->
-            <div class="sidebar">
-                <div class="nav-item">
-                    <i class="fa fa-home"></i>
-                    <span>Dashboard</span>
-                </div>
-                <div class="nav-item">
-                    <i class="fa fa-users"></i>
-                    <span>Klassen</span>
-                </div>
-                <div class="nav-item">
-                    <i class="fa fa-chart-bar"></i>
-                    <span>Voortgang</span>
-                </div>
-                <div class="nav-item">
-                    <i class="fa fa-pencil-alt"></i>
-                    <span>Leerdoelen</span>
-                </div>
-                <div class="nav-item">
-                    <i class="fa fa-user-circle"></i>
-                    <span>Profiel</span>
-                </div>
-                <div class="nav-item">
-                    <i class="fa fa-sign-out-alt"></i>
-                    <span>Uitloggen</span>
-                </div>
-            </div>
+<link
+	rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+/>
+<link
+	rel="stylesheet"
+	href="{{ url_for('static', filename='docentdashboard.css') }}"
+/>
+<div class="container">
+	<!--sidebar-->
+	<div class="sidebar">
+		<div class="logo">
+			<h1>Docent<span>Dashboard</span></h1>
+		</div>
+		<div class="nav-menu">
+			<div class="menu-heading">Main</div>
+			<div class="nav-item active">
+				<i class="fa fa-bars"></i>
+				<span>Home</span>
+			</div>
+			<div class="nav-item">
+				<i class="fa fa-chart-bar"></i>
+				<span>Voortgang</span>
+			</div>
+			<div class="nav-item">
+				<i class="fa fa-pencil-alt"></i>
+				<span>Leerdoelen</span>
+			</div>
+			<div class="nav-item">
+				<i class="fa fa-user-circle"></i>
+				<span>Profiel</span>
+			</div>
+			<div class="nav-item">
+				<i class="fa fa-sign-out-alt"></i>
+				<span>Uitloggen</span>
+			</div>
+		</div>
+	</div>
 
-            <!--main content-->
-            <div class="main-content">
-                <div class="header">
-                    <div class="page-title">
-                        <h1>Dashboard</h1>
-                        <div class="page-subtitle">Welkom terug, {{ name }}.</div>
-                    </div>
-                </div>
+	<!--main content-->
+	<div class="main-content">
+		<div class="header">
+			<div class="page-title">
+				<h1>Dashboard</h1>
+				<div class="page-subtitle">Welkom terug, {{ name }}.</div>
+			</div>
+		</div>
+		<!--type selector-->
+		<div class="student-selector">
+			<label for="studentSelect">Kies student:</label>
+			<select id="studentSelect">
+				{% for student in students %}
+				<option value="{{ student.id }}">{{ student.name }}</option>
+				{% endfor %}
+			</select>
+		</div>
+		<div style="width: 200px; margin: 20px auto; text-align: center">
+			<label for="chartTypeSelect">Kies type:</label>
+			<select id="chartTypeSelect">
+				<option value="all" selected>Alles</option>
+				<option value="quiz">Quiz</option>
+				<option value="project">Project</option>
+				<option value="test">Test</option>
+				<option value="observatie">Observatie</option>
+			</select>
+		</div>
 
-                <!--type selector-->
-                <div style="width: 200px; margin: 20px auto; text-align: center">
-                    <label for="chartTypeSelect">Kies type:</label>
-                    <select id="chartTypeSelect">
-                        <option value="all" selected>Alles</option>
-                        <option value="quiz">Quiz</option>
-                        <option value="project">Project</option>
-                        <option value="test">Test</option>
-                        <option value="observatie">Observatie</option>
-                    </select>
-                </div>
-
-                <div
-                    class="chart-container"
-                    style="
-                        width: 90%;
-                        max-width: 1000px;
-                        margin: 40px auto;
-                        height: 400px;
-                    "
-                >
-                    <canvas id="myChart"></canvas>
-                </div>
-
-                <script src="{{ url_for('static', filename='docentdashboard.js') }}"></script
+		<div
+			class="chart-container"
+			style="width: 90%; max-width: 1000px; margin: 40px auto; height: 400px"
+		>
+			<canvas id="myChart"></canvas>
+		</div>
+	</div>
+</div>
 {% endblock %}
