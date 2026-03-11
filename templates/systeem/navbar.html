@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Leerling Dashboard</title>
+		<title>{{ user }} Dashboard</title>
 		<link
 			rel="stylesheet"
 			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
@@ -19,8 +19,9 @@
 			<!--sidebar-->
 			<div class="sidebar">
 				<div class="logo">
-					<h1>Leerling<span>Dashboard</span></h1>
+					<h1>{{ user }}<span>Dashboard</span></h1>
 				</div>
+                
 				<div class="nav-menu">
 					<div class="menu-heading">Main</div>
 					<div class="nav-item active">
@@ -30,6 +31,8 @@
 						<span>Home</span>
 						</a>
 					</div>
+
+					{%if user == "leerling"%}
 					<div class="nav-item">
 						<!--change the error_page in url_for('error_page')}} for the function name for the flask route you want to route to-->
 						<a href="{{url_for('error_page')}}">
@@ -37,29 +40,33 @@
 						<span>Voortgang</span>
 						</a>
 					</div>
+					{% endif %}
+					{%if user == "leerling"%}
 					<div class="nav-item">
-						<a href="{{url_for('leerling_kernwoord_en_onderwerp')}}">
+						<a href="{{url_for('error_page')}}">
 						<i class="fa fa-pencil-alt"></i>
 						<span>Leerdoelen</span>
 						</a>
 					</div>
+					{% endif %}
+					{%if user == "leerling"%}
 					<div class="nav-item">
 						<!--change the error_page in url_for('error_page')}} for the function name for the flask route you want to route to-->
 						<a href="{{url_for('error_page')}}">
 						<i class="fa fa-user-circle"></i>
 						<span>Profiel</span>
 						</a>
+					{% endif %}
 					</div>
 					<div class="nav-item">
 						<!--change the error_page in url_for('error_page')}} for the function name for the flask route you want to route to-->
-						<a href="{{url_for('error_page')}}">
+						<a href="{{url_for('logout')}}">
 						<i class="fa fa-sign-out-alt"></i>
 						<span>Uitloggen</span>
 						</a>
 					</div>
 				</div>
 			</div>
-
 			<!--main content-->
 			<div class="main-content">
 				<div class="header">
@@ -70,5 +77,6 @@
 				</div>
 			</div>
 		</div>
+		<script src="{{ url_for('static', filename='studentdashboard.js') }}"></script>
 	</body>
 </html>

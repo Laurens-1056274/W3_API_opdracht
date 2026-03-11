@@ -15,10 +15,12 @@ def landlingpage():
 def studentdashboard():
     if not session.get('gebruikers id'):
         return redirect('/login')
+    
     return render_template(
         "pages/leerling/studentdashboard.html",
         name=session.get('gebruikersnaam'),
         student_id=session.get('gebruikers id'),
+        user=session["user type"]
     )
 
 @app.route('/api/student/voortgang')
@@ -84,27 +86,14 @@ def check_gebruiker():
 @app.route('/docent/voorbeeld')
 def docent_voorbeeld():
     try:
-        print(session["gebruikersnaam"])
+        print(session["user type"])
     except:
         return redirect('/error_page')
         
-    return render_template("/pages/docent/test.html")
-
-
-@app.route('/leerling/kernwoord_en_onderwerp', methods=['GET', 'POST'])
-def leerling_kernwoord_en_onderwerp():
-    # Check if user is logged in, else go to error page
-    try:
-        student_data = GetStudentData()
-        learning_goals = student_data.get_learning_goal_overview(session["gebruikers id"])
-    except:
-        return redirect('/error_page')
-    
-
     return render_template(
-        "pages/leerling/kernwoord_en_onderwerp.html",
-        name=session["gebruikersnaam"],
-        learning_goals=learning_goals)
+        "systeem/navbar.html",
+        user=session["user type"],)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
