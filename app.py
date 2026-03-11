@@ -69,7 +69,7 @@ def check_gebruiker():
     if session["user type"] == "leerling":
         user_exists = search_user(session['gebruikersnaam'],session['gebruikers id']).search_leerling()
         if user_exists:
-            return redirect("/leerling/kernwoord_en_onderwerp")
+            return redirect("/studentdashboard")
 
     elif session["user type"] == "docent" :
         user_exists = search_user(session['gebruikersnaam'],session['gebruikers id']).search_docent()
