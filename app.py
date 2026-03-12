@@ -76,17 +76,28 @@ def check_gebruiker():
     elif session["user type"] == "docent" :
         user_exists = search_user(session['gebruikersnaam'],session['gebruikers id']).search_docent()
         if user_exists:
-            return redirect("docent/voorbeeld")
+            return redirect("/docentdashboard")
     
 
     return render_template("systeem/login.html", invalid_user=True, user=session["user type"])
 
 
-# Deze flask route doet niks, het bestaat alleen om te testen of de login werkt
-@app.route('/docent/voorbeeld')
+@app.route('/docentdashboard')
 def docent_voorbeeld():
     try:
-        print(session["user type"])
+        print(session["gebruikersnaam"])
+    except:
+        return redirect('/error_page')
+        
+    return render_template("/pages/docent/docentdashboard.html")
+
+
+@app.route('/leerling/kernwoord_en_onderwerp', methods=['GET', 'POST'])
+def leerling_kernwoord_en_onderwerp():
+    # Check if user is logged in, else go to error page
+    try:
+        student_data = GetStudentData()
+        learning_goals = student_data.get_learning_goal_overview(session["gebruikers id"])
     except:
         return redirect('/error_page')
     return render_template(
