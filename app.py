@@ -89,20 +89,8 @@ def docent_voorbeeld():
     except:
         return redirect('/error_page')
         
-    return render_template("/pages/docent/docentdashboard.html")
-
-
-@app.route('/leerling/kernwoord_en_onderwerp', methods=['GET', 'POST'])
-def leerling_kernwoord_en_onderwerp():
-    # Check if user is logged in, else go to error page
-    try:
-        student_data = GetStudentData()
-        learning_goals = student_data.get_learning_goal_overview(session["gebruikers id"])
-    except:
-        return redirect('/error_page')
-    return render_template(
-        "pages/docent/test.html",
-        user=session["user type"],)
+    return render_template("/pages/docent/docentdashboard.html",
+                           user=session["user type"])
 
 
 if __name__ == '__main__':

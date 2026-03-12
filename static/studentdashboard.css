@@ -192,11 +192,4 @@ body {
   height: 100% !important;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-  cursor: inherit;
-  all: unset;
-  display: inline;
-}
 

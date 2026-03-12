@@ -1,83 +1,52 @@
-<!doctype html>
-<html lang="nl">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>{{ user }} Dashboard</title>
-		<link
-			rel="stylesheet"
-			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-		/>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-		<link
-			rel="stylesheet"
-			href="{{ url_for('static', filename='studentdashboard.css') }}"
-		/>
-	</head>
-	<body>
-		<div class="container">
-			<!--sidebar-->
-			<div class="sidebar">
-				<div class="logo">
-					<h1>{{ user }}<span>Dashboard</span></h1>
-				</div>
-                
-				<div class="nav-menu">
-					<div class="menu-heading">Main</div>
-					<div class="nav-item active">
-						<!--change the error_page in url_for('error_page') for the function name for the flask route you want to route to-->
-						<a href="{{url_for('error_page')}}">
-						<i class="fa fa-bars"></i>
-						<span>Home</span>
-						</a>
-					</div>
+<style>
+	a {
+	color: inherit;
+	text-decoration: none;
+	cursor: inherit;
+	all: unset;
+	display: inline;
+	}
+</style>
 
-					{%if user == "leerling"%}
-					<div class="nav-item">
-						<!--change the error_page in url_for('error_page') for the function name for the flask route you want to route to-->
-						<a href="{{url_for('error_page')}}">
-						<i class="fa fa-chart-bar"></i>
-						<span>Voortgang</span>
-						</a>
-					</div>
-					{% endif %}
-					{%if user == "leerling"%}
-					<div class="nav-item">
-						<a href="{{url_for('error_page')}}">
-						<i class="fa fa-pencil-alt"></i>
-						<span>Leerdoelen</span>
-						</a>
-					</div>
-					{% endif %}
-					{%if user == "leerling"%}
-					<div class="nav-item">
-						<!--change the error_page in url_for('error_page') for the function name for the flask route you want to route to-->
-						<a href="{{url_for('error_page')}}">
-						<i class="fa fa-user-circle"></i>
-						<span>Profiel</span>
-						</a>
-					{% endif %}
-					</div>
-					<div class="nav-item">
-						<!--change the error_page in url_for('error_page') for the function name for the flask route you want to route to-->
-						<a href="{{url_for('logout')}}">
-						<i class="fa fa-sign-out-alt"></i>
-						<span>Uitloggen</span>
-						</a>
-					</div>
-				</div>
+<div class="container">
+	<!--sidebar-->
+	<div class="sidebar">
+		<div class="logo">
+			<h1>{{ user }}<span>Dashboard</span></h1>
+		</div>
+		
+		<div class="nav-menu">
+			<div class="menu-heading">Main</div>
+			<div class="nav-item active">
+				{%if user=="leerling"%}<a href="{{url_for('studentdashboard')}}">{%endif%}{%if user=="docent"%}<a href="{{url_for('docent_voorbeeld')}}">{%endif%}
+				<i class="fa fa-bars"></i>
+				<span>Home</span></a>
+			</div>
+			{%if user=="leerling"%}
+			<div class="nav-item">
+				<a href="{{url_for('error_page')}}">
+				<i class="fa fa-chart-bar"></i>
+				<span>Voortgang</span></a>
+			</div>
+			{%endif%}
+			{%if user=="leerling"%}
+			<div class="nav-item">
+				<a href="{{url_for('error_page')}}">
+				<i class="fa fa-pencil-alt"></i>
+				<span>Leerdoelen</span></a>
+			</div>
+			{%endif%}
+			{%if user=="leerling"%}
+			<div class="nav-item">
+				<a href="{{url_for('error_page')}}">
+				<i class="fa fa-user-circle"></i>
+				<span>Profiel</span></a>
+			</div>
+			{%endif%}
+			<div class="nav-item">
+				<i class="fa fa-sign-out-alt"></i>
+				<a href="{{url_for('logout')}}">
+				<span>Uitloggen</span></a>
 			</div>
 		</div>
-		<script src="{{ url_for('static', filename='studentdashboard.js') }}"></script>
-
-		<!--change the 2 colours to the colors you want for the docent page-->
-		{%if user == "docent"%}
-		<style>
-			.sidebar {
-				background: linear-gradient(180deg, #5b8def 0%, var(--primary) 100%);
-				--primary: #2d6cdf;
-			}
-		</style>
-		{% endif %}
-	</body>
-</html>
+  		</div>
