@@ -25,7 +25,7 @@
 				<div class="nav-menu">
 					<div class="menu-heading">Main</div>
 					<div class="nav-item active">
-						<!--change the error_page in url_for('error_page')}} for the function name for the flask route you want to route to-->
+						<!--change the error_page in url_for('error_page') for the function name for the flask route you want to route to-->
 						<a href="{{url_for('error_page')}}">
 						<i class="fa fa-bars"></i>
 						<span>Home</span>
@@ -34,7 +34,7 @@
 
 					{%if user == "leerling"%}
 					<div class="nav-item">
-						<!--change the error_page in url_for('error_page')}} for the function name for the flask route you want to route to-->
+						<!--change the error_page in url_for('error_page') for the function name for the flask route you want to route to-->
 						<a href="{{url_for('error_page')}}">
 						<i class="fa fa-chart-bar"></i>
 						<span>Voortgang</span>
@@ -51,7 +51,7 @@
 					{% endif %}
 					{%if user == "leerling"%}
 					<div class="nav-item">
-						<!--change the error_page in url_for('error_page')}} for the function name for the flask route you want to route to-->
+						<!--change the error_page in url_for('error_page') for the function name for the flask route you want to route to-->
 						<a href="{{url_for('error_page')}}">
 						<i class="fa fa-user-circle"></i>
 						<span>Profiel</span>
@@ -59,7 +59,7 @@
 					{% endif %}
 					</div>
 					<div class="nav-item">
-						<!--change the error_page in url_for('error_page')}} for the function name for the flask route you want to route to-->
+						<!--change the error_page in url_for('error_page') for the function name for the flask route you want to route to-->
 						<a href="{{url_for('logout')}}">
 						<i class="fa fa-sign-out-alt"></i>
 						<span>Uitloggen</span>
@@ -67,16 +67,17 @@
 					</div>
 				</div>
 			</div>
-			<!--main content-->
-			<div class="main-content">
-				<div class="header">
-					<div class="page-title">
-						<h1>Dashboard</h1>
-					</div>
-				</div>
-				</div>
-			</div>
 		</div>
 		<script src="{{ url_for('static', filename='studentdashboard.js') }}"></script>
+
+		<!--change the 2 colours to the colors you want for the docent page-->
+		{%if user == "docent"%}
+		<style>
+			.sidebar {
+				background: linear-gradient(180deg, #5b8def 0%, var(--primary) 100%);
+				--primary: #2d6cdf;
+			}
+		</style>
+		{% endif %}
 	</body>
 </html>

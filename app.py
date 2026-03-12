@@ -9,7 +9,7 @@ app.secret_key = "_"
 
 @app.route('/')
 def landlingpage():
-    return render_template("landingpage.html")
+    return render_template("systeem/landingpage.html")
 
 @app.route('/studentdashboard')
 def studentdashboard():
@@ -91,7 +91,7 @@ def docent_voorbeeld():
         return redirect('/error_page')
         
     return render_template(
-        "systeem/navbar.html",
+        "pages/docent/test.html",
         user=session["user type"],)
 
 
