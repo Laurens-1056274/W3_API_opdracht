@@ -89,7 +89,6 @@ def docent_voorbeeld():
         print(session["user type"])
     except:
         return redirect('/error_page')
-        
     return render_template(
         "pages/docent/test.html",
         user=session["user type"],)
