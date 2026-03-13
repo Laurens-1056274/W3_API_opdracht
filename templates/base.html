@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ page_title | default("Test correct") }}</title>
+</head>
+<body>
+    {% include "navbar.html" %}
+        <main class="main-container mt-4">
+        <h1>{{ page_title }}</h1>
+        {% block content %}{% endblock %}
+        </main>
+</body>
+</html>
+
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Arial", sans-serif;
+    }
+
+    body {
+    background-color: #f5f7fb;
+    color: var(--text);
+    overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    }
+    ::-webkit-scrollbar-thumb {
+    background: var(--primary-light);
+    border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+    }
+
+
+</style>
