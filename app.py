@@ -49,9 +49,7 @@ def login_docent():
 
 @app.route("/logout")
 def logout():
-    return render_template("systeem/uitloggen.html", 
-                           page_title="confirmatie uitloggen", 
-                           description="Pagina om uit te loggen, klik op de uitloggen knop om uit te loggen.")
+    return render_template("systeem/logout.html")
 
 @app.route('/clear_session')
 def clear_session():
