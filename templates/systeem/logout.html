@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block page_title %}Uitloggen{% endblock %}
+
+{% block content %}
+<div class="logout-container">
+    <h2>Weet u zeker dat u wilt uitloggen?</h2>
+    <form action="{{ url_for('clear_session') }}">
+        <button type="submit" class="yes">Uitloggen</button>
+    </form>
+</div>
+{% endblock %}
