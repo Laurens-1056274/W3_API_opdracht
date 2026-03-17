@@ -1,4 +1,4 @@
-{% extends "systeem/base.html" %} {% block content %}
+{% extends "base.html" %} {% block content %}
 <!-- Docent Dashboard Content -->
 <link
 	rel="stylesheet"
@@ -8,35 +8,8 @@
 <script src="{{ url_for('static', filename='docentdashboard.js') }}"></script>
 <link
 	rel="stylesheet"
-	href="{{ url_for('static', filename='docentdashboard.css') }}"
+	href="{{ url_for('static', filename='base.css') }}"
 />
-<div class="container">
-	<!--sidebar-->
-	<div class="sidebar">
-		<div class="logo">
-			<h1>Docent<span>Dashboard</span></h1>
-		</div>
-		<div class="nav-menu">
-			<div class="menu-heading">Main</div>
-			<div class="nav-item active">
-				<i class="fa fa-bars"></i>
-				<span>Home</span>
-			</div>
-			<div class="nav-item">
-				<i class="fa fa-pencil-alt"></i>
-				<span>Leerdoelen</span>
-			</div>
-			<div class="nav-item">
-				<i class="fa fa-user-circle"></i>
-				<span>Profiel</span>
-			</div>
-			<div class="nav-item">
-				<i class="fa fa-sign-out-alt"></i>
-				<span>Uitloggen</span>
-			</div>
-		</div>
-	</div>
-
 	<!--main content-->
 	<div class="main-content">
 		<div class="header">

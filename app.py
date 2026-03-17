@@ -9,16 +9,18 @@ app.secret_key = "_"
 
 @app.route('/')
 def landlingpage():
-    return render_template("landingpage.html")
+    return render_template("systeem/landingpage.html")
 
 @app.route('/studentdashboard')
 def studentdashboard():
     if not session.get('gebruikers id'):
         return redirect('/login')
+    
     return render_template(
         "pages/leerling/studentdashboard.html",
         name=session.get('gebruikersnaam'),
         student_id=session.get('gebruikers id'),
+        user=session["user type"]
     )
 
 @app.route('/api/student/voortgang')
@@ -47,9 +49,7 @@ def login_docent():
 
 @app.route("/logout")
 def logout():
-    return render_template("systeem/uitloggen.html", 
-                           page_title="confirmatie uitloggen", 
-                           description="Pagina om uit te loggen, klik op de uitloggen knop om uit te loggen.")
+    return render_template("systeem/logout.html", user=session["user type"])
 
 @app.route('/clear_session')
 def clear_session():
@@ -79,6 +79,17 @@ def check_gebruiker():
 
     return render_template("systeem/login.html", invalid_user=True, user=session["user type"])
 
+@app.route('/profiel')
+def profiel():
+    try:
+        return render_template(
+            "/pages/leerling/profiel.html",
+            user=session["user type"],
+            profiel=GetStudentData().profiel(session["user type"], session['gebruikersnaam'], session['gebruikers id'])
+        )
+    
+    except:
+        return redirect('/error_page')
 
 @app.route('/docentdashboard')
 def docent_voorbeeld():
@@ -87,23 +98,9 @@ def docent_voorbeeld():
     except:
         return redirect('/error_page')
         
-    return render_template("/pages/docent/docentdashboard.html")
+    return render_template("/pages/docent/docentdashboard.html",
+                           user=session["user type"])
 
-
-@app.route('/leerling/kernwoord_en_onderwerp', methods=['GET', 'POST'])
-def leerling_kernwoord_en_onderwerp():
-    # Check if user is logged in, else go to error page
-    try:
-        student_data = GetStudentData()
-        learning_goals = student_data.get_learning_goal_overview(session["gebruikers id"])
-    except:
-        return redirect('/error_page')
-    
-
-    return render_template(
-        "leerling/kernwoord_en_onderwerp.html",
-        name=session["gebruikersnaam"],
-        learning_goals=learning_goals)
 
 if __name__ == '__main__':
     app.run(debug=True)
