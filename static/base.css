@@ -431,3 +431,107 @@ button:hover {
 .logout-container .yes:active {
     transform: translateY(0);
 }
+
+/* ===== PROFILE PAGE STYLES ===== */
+.profile-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 20px 0;
+}
+
+/* Profile card - centered with max width */
+.profile-card {
+    background: white;
+    border-radius: var(--radius, 10px);
+    box-shadow: var(--shadow-sm, 0 4px 6px -1px rgba(0,0,0,0.1));
+    padding: 30px;
+    border: 1px solid var(--border, #e9ecef);
+    width: 100%;
+    max-width: 600px;  /* Limits the width */
+    margin: 0 auto;     /* Centers the card */
+}
+
+/* Profile header - outside the card */
+.page-title {
+    margin-bottom: 30px;
+    padding: 0 20px;
+}
+
+.page-title h1 {
+    font-size: 2.2rem;
+    color: var(--primary, #11692b);
+    margin-bottom: 8px;
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-light, #718096);
+    border-bottom: 2px solid var(--border, #e9ecef);
+    padding-bottom: 15px;
+}
+
+/* Profile fields */
+.profile-field {
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border, #e9ecef);
+}
+
+.profile-field:last-child {
+    border-bottom: none;
+}
+
+.profile-field-label {
+    width: 120px;
+    font-weight: 600;
+    color: var(--text, #2d3748);
+    font-size: 1rem;
+}
+
+.profile-field-value {
+    flex: 1;
+    color: var(--text-light, #718096);
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.profile-field-value.id-value {
+    font-family: monospace;
+    background: var(--primary-light, #f7f9fc);
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: inline-block;
+    font-size: 0.95rem;
+}
+
+/* Class badge for student */
+.class-badge {
+    background: linear-gradient(135deg, var(--primary, #11692b), var(--secondary, #2ec4b6));
+    color: white;
+    padding: 4px 16px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: inline-block;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .profile-card {
+        max-width: 90%;
+        padding: 20px;
+    }
+    
+    .profile-field {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .profile-field-label {
+        width: 100%;
+    }
+}

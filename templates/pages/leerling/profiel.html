@@ -1,18 +1,37 @@
-{% extends "base.html" %} {% block content%}
+{% extends "base.html" %}
 
+{% block content %}
 <div class="main-content">
-    <div class="header">
-        <div class="page-title">
-            <h1>Profiel</h1>
-        </div>
+    <!-- Profile Header -->
+    <div class="page-title">
+        <h1>Profiel</h1>
         <div class="page-subtitle">Jouw gegevens, {{ session.gebruikersnaam }}.</div>
     </div>
-    {% for x in profiel %}
-    <p>ID: {{ x.id }}</p>
-    <p>Naam: {{ x.name }}</p>
-    {%if user == "leerling" %}
-    <p>Klas: {{ x.klas }}</p>
-    {%endif%}
-    {% endfor %}
+
+    <!-- Profile Information Card - Centered -->
+    <div class="profile-container">
+        <div class="profile-card">
+            {% for x in profiel %}
+            <div class="profile-field">
+                <div class="profile-field-label">ID</div>
+                <div class="profile-field-value id-value">{{ x.id }}</div>
+            </div>
+            
+            <div class="profile-field">
+                <div class="profile-field-label">Naam</div>
+                <div class="profile-field-value">{{ x.name }}</div>
+            </div>
+            
+            {% if user == "leerling" %}
+            <div class="profile-field">
+                <div class="profile-field-label">Klas</div>
+                <div class="profile-field-value">
+                    <span class="class-badge">{{ x.klas }}</span>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
 </div>
 {% endblock %}
