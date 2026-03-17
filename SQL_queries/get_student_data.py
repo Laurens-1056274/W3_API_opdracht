@@ -148,6 +148,29 @@ class GetStudentData:
             (snapshot_id,),
         )
         return [dict(row) for row in cur.fetchall()]
+    
+    def profiel(self, user_type, student_name: str, student_id: int):
+            if user_type == "leerling":
+                cur = self.con.execute(
+                """
+                SELECT *
+                FROM students
+                WHERE name = ? AND  id = ?
+                """,
+                (student_name,student_id),
+                )
+            if user_type == "docent":
+                cur = self.con.execute(
+                """
+                SELECT *
+                FROM teachers
+                WHERE name = ? AND  id = ?
+                """,
+                (student_name,student_id),
+                )
+
+            return [dict(row) for row in cur.fetchall()]
+
 
     @staticmethod
     def _calc_averages(snapshots: list[dict]) -> tuple[float | None, float | None]:
