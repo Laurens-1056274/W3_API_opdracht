@@ -79,6 +79,17 @@ def check_gebruiker():
 
     return render_template("systeem/login.html", invalid_user=True, user=session["user type"])
 
+@app.route('/profiel')
+def profiel():
+    try:
+        return render_template(
+            "/pages/leerling/profiel.html",
+            user=session["user type"],
+            profiel=GetStudentData().profiel(session["user type"], session['gebruikersnaam'], session['gebruikers id'])
+        )
+    
+    except:
+        return redirect('/error_page')
 
 @app.route('/docentdashboard')
 def docent_voorbeeld():

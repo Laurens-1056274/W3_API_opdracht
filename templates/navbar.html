@@ -7,7 +7,10 @@
 	display: inline;
 	}
 </style>
-
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+	/>
 <div class="container">
 	<!--sidebar-->
 	<div class="sidebar">
@@ -36,13 +39,11 @@
 				<span>Leerdoelen</span></a>
 			</div>
 			{%endif%}
-			{%if user=="leerling"%}
 			<div class="nav-item">
-				<a href="{{url_for('error_page')}}">
+				<a href="{{url_for('profiel')}}">
 				<i class="fa fa-user-circle"></i>
 				<span>Profiel</span></a>
 			</div>
-			{%endif%}
 			<div class="nav-item">
 				<i class="fa fa-sign-out-alt"></i>
 				<a href="{{url_for('logout')}}">
