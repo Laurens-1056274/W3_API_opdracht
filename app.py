@@ -49,7 +49,7 @@ def login_docent():
 
 @app.route("/logout")
 def logout():
-    return render_template("systeem/logout.html")
+    return render_template("systeem/logout.html", user=session["user type"])
 
 @app.route('/clear_session')
 def clear_session():
