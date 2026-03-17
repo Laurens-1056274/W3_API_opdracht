@@ -2,7 +2,7 @@ import json
 import sqlite3
 import random
 
-with open("data-sample-small.json", "r") as f:
+with open("data-sample-small.json", "r", encoding="utf-8") as f:
     data = json.load(f)
 
 con = sqlite3.connect("database.db")
