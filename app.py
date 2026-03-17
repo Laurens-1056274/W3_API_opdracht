@@ -90,6 +90,16 @@ def profiel():
     
     except:
         return redirect('/error_page')
+    
+
+@app.route('/leerdoelen')
+def leerdoelen():
+    learning_goals = GetStudentData().get_learning_goal_overview(session['gebruikers id'])
+    return render_template(
+        "/pages/leerling/leerdoelen.html",
+        user=session["user type"],
+        learning_goals=learning_goals)
+
 
 @app.route('/docentdashboard')
 def docent_voorbeeld():

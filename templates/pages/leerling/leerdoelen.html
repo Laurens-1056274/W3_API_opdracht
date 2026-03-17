@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block content %}
+<h1>Leerdoelen</h1>
+
+<div class="scroll-container">
+    {% for x in learning_goals %}
+        <hr>
+        <h2>{{ x.title }}</h2>
+        <hr>
+        <div class="profile-container">
+            <div class="profile-card">
+                <p>Keywords: {{ x.keywords }}</p>
+                <p>Gemiddelde Kennen: {{ x.avg_kennen }}</p>
+                <p>Gemiddelde Kunnen: {{ x.avg_kunnen }}</p>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
