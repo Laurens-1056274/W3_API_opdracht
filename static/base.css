@@ -535,3 +535,24 @@ button:hover {
         width: 100%;
     }
 }
+
+body {
+    overflow: hidden;
+}
+
+/* Scrollbare rechterkant */
+.scroll-container {
+    height: 100vh;
+    overflow-y: auto;
+    padding-right: 20px; /* more space so nothing hides */
+}
+
+/* optioneel mooier maken */
+.scroll-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
