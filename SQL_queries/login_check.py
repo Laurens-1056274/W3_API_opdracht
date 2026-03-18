@@ -1,18 +1,19 @@
 import sqlite3
 
 class search_user:
-  def __init__(self, gebruikersnaam, ID):
+  def __init__(self, e_mail, password):
 
-    self.gebruikersnaam = gebruikersnaam
-    self.ID = ID
+    self.e_mail = e_mail
+    self.password = password
 
   def search_leerling(self):
     con = sqlite3.connect("database.db")
     cur = con.cursor()
-    cur.execute('SELECT name,id FROM STUDENTS WHERE name = ? AND id = ?', (self.gebruikersnaam,self.ID))
+    cur.execute('SELECT id,name FROM STUDENTS WHERE e_mail = ? AND password = ?', (self.e_mail,self.password))
     result = cur.fetchall()
+    print(result)
     if len(result) == 1:
-      result = True
+      pass
     else:
       result = False
     cur.close()
@@ -21,10 +22,11 @@ class search_user:
   def search_docent(self):
     con = sqlite3.connect("database.db")
     cur = con.cursor()
-    cur.execute('SELECT name,id FROM TEACHERS WHERE name = ? AND id = ?', (self.gebruikersnaam,self.ID))
+    cur.execute('SELECT id,name FROM TEACHERS WHERE e_mail = ? AND password = ?', (self.e_mail,self.password))
     result = cur.fetchall()
+    print(result)
     if len(result) == 1:
-      result = True
+      pass
     else:
       result = False
     cur.close()

@@ -62,18 +62,23 @@ def error_page():
 
 @app.route('/check_gebruiker', methods=['GET', 'POST'])
 def check_gebruiker():
-    gebruikersnaam = request.form.get("gebruikersnaam")
-    ID = request.form.get("ID")
-    session['gebruikersnaam'] = gebruikersnaam
-    session['gebruikers id'] = ID
+
+    email = request.form.get("email")
+    password = request.form.get("wachtwoord")
+    session['email'] = email
+    session['password'] = password
     if session["user type"] == "leerling":
-        user_exists = search_user(session['gebruikersnaam'],session['gebruikers id']).search_leerling()
+        user_exists = search_user(session['email'],session['password']).search_leerling()
+        session['gebruikersnaam'] = user_exists[0][1]
+        session['gebruikers id'] = user_exists[0][0]
         if user_exists:
             return redirect("/studentdashboard")
 
     elif session["user type"] == "docent" :
-        user_exists = search_user(session['gebruikersnaam'],session['gebruikers id']).search_docent()
+        user_exists = search_user(session['email'],session['password']).search_docent()
         if user_exists:
+            session['gebruikersnaam'] = user_exists[0][1]
+            session['gebruikers id'] = user_exists[0][0]
             return redirect("/docentdashboard")
     
 
