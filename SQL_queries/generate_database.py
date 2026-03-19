@@ -3,12 +3,10 @@ import sqlite3
 import random
 import string
 
-password_maximum_lenght = 8
-password_minimum_lenght = 7
 def generate_password():
     password = ''.join(
         random.choice(random.choice(string.ascii_lowercase) + random.choice(string.ascii_uppercase))
-        for x in range(random.randint(password_minimum_lenght, password_maximum_lenght)))
+        for x in range(random.randint(7, 8)))
     return password
 
 

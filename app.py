@@ -14,7 +14,7 @@ def landlingpage():
 @app.route('/studentdashboard')
 def studentdashboard():
     if not session.get('gebruikers id'):
-        return redirect('/login')
+        return redirect('/error_page')
     
     return render_template(
         "pages/leerling/studentdashboard.html",
@@ -62,26 +62,28 @@ def error_page():
 
 @app.route('/check_gebruiker', methods=['GET', 'POST'])
 def check_gebruiker():
-
     email = request.form.get("email")
+    # capitalize fisrt letter. I do this because the first letter needs to be capitalized for the DB
+    email = email.capitalize()
     password = request.form.get("wachtwoord")
     session['email'] = email
     session['password'] = password
-    if session["user type"] == "leerling":
-        user_exists = search_user(session['email'],session['password']).search_leerling()
-        session['gebruikersnaam'] = user_exists[0][1]
-        session['gebruikers id'] = user_exists[0][0]
-        if user_exists:
-            return redirect("/studentdashboard")
-
-    elif session["user type"] == "docent" :
-        user_exists = search_user(session['email'],session['password']).search_docent()
-        if user_exists:
+    try:
+        if session["user type"] == "leerling":
+            user_exists = search_user(session['email'],session['password']).search_leerling()
             session['gebruikersnaam'] = user_exists[0][1]
             session['gebruikers id'] = user_exists[0][0]
-            return redirect("/docentdashboard")
-    
+            if user_exists:
+                return redirect("/studentdashboard")
 
+        elif session["user type"] == "docent" :
+            user_exists = search_user(session['email'],session['password']).search_docent()
+            if user_exists:
+                session['gebruikersnaam'] = user_exists[0][1]
+                session['gebruikers id'] = user_exists[0][0]
+                return redirect("/docentdashboard")
+    except:
+        return render_template("systeem/login.html", invalid_user=True, user=session["user type"])
     return render_template("systeem/login.html", invalid_user=True, user=session["user type"])
 
 @app.route('/profiel')
@@ -95,7 +97,6 @@ def profiel():
     
     except:
         return redirect('/error_page')
-    
 
 @app.route('/leerdoelen')
 def leerdoelen():
@@ -105,7 +106,6 @@ def leerdoelen():
         user=session["user type"],
         learning_goals=learning_goals)
 
-
 @app.route('/docentdashboard')
 def docent_voorbeeld():
     try:
@@ -114,8 +114,8 @@ def docent_voorbeeld():
         return redirect('/error_page')
         
     return render_template("/pages/docent/docentdashboard.html",
-                           user=session["user type"])
-
+                           user=session["user type"],
+                           name=session.get('gebruikersnaam'))
 
 if __name__ == '__main__':
     app.run(debug=True)
