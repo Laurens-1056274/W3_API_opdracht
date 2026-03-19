@@ -92,7 +92,8 @@ def profiel():
         return render_template(
             "/pages/leerling/profiel.html",
             user=session["user type"],
-            profiel=GetStudentData().profiel(session["user type"], session['gebruikersnaam'], session['gebruikers id'])
+            profiel=GetStudentData().profiel(session["user type"], session['gebruikersnaam'], session['gebruikers id']),
+            email=session['email']
         )
     
     except:
