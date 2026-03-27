@@ -16,7 +16,12 @@ def landlingpage():
 
 @app.route('/studentdashboard')
 def studentdashboard():
-    if not session.get('gebruikers id'):
+    try:
+        if session["user type"] == "leerling":
+            pass
+        else:
+            return redirect('/')
+    except:
         return redirect('/error_page')
 
     return render_template(
@@ -176,7 +181,11 @@ def leerdoelen():
 @app.route('/docentdashboard')
 def docent_voorbeeld():
     try:
-        print(session["gebruikersnaam"])
+        if session["user type"] == "docent":
+            pass
+        else:
+            return redirect('/')
+
     except:
         return redirect('/error_page')
 
