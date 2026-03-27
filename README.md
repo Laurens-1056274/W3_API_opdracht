@@ -50,6 +50,25 @@ Na het opstarten van de omgeving, graag de database maken met de volgende comman
 py generate_database.py
 ```
 
+### Stap 3: Opstarten
+
+De app kan dan dus eindelijk opgestart worden met de gegeven commando:
+
+```shell
+py app.py
+```
+
+Dit brengt jou dan naar de landing page waar je dus kan inloggen als student of docent
+
+![Landing Page](landing-page.png)
+
+Hiervoor dus de test users:
+
+| Type    | Email          | Password          |
+| ------- | -------------- | ----------------- |
+| Docent  | john@gmail.com | zie `teachers` tabel in `database.db` |
+| Student | sam@gmail.com  | zie `students` tabel in `database.db` |
+
 <!-- How to login
 
 first make sure you have the updated database.md. If this is not the case you will not be able to login. To get the latest database.db, run generate
