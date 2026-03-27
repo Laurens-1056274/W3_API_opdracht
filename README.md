@@ -1,6 +1,6 @@
 <!-- LTex: language=nl -->
 
-# Werkplaats 3 (2026), Rest, 1C4, Lion
+# Werkplaats 3 (2026), Rest, 1C4 - Lion
 
 Gegevens:
 
@@ -38,11 +38,17 @@ Installeer de modules:
 pip install -r requirements.txt
 ```
 
-### Stap 2: Maak de database
+### Stap 2: Genereer de database
+
+Gegeven hier is de ERD diagram.
 
 ![ERD Diagram](ERD.png)
 
-Na het opstarten van de omgeving, graag de database maken
+Na het opstarten van de omgeving, graag de database maken met de volgende commando. Deze zal dus volgens het diagram hierboven gemaakt worden:
+
+```shell
+py generate_database.py
+```
 
 <!-- How to login
 
