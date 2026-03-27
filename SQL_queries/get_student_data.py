@@ -320,33 +320,51 @@ class GetStudentData:
             "problematic_keywords": keywords_result
         }
 
-    def get_class_analysis(self):
+    def get_class_analysis(self, class_name=None):
+        # Als geen klas is opgegeven, gebruik alle data
+        class_filter = ""
+        if class_name:
+            class_filter = f"AND stud.klas = '{class_name}'"
+        
         # Leerdoelen
-        cur = self.con.execute("""
+        cur = self.con.execute(f"""
             SELECT lg.title, AVG(st.kennen) as kennen, AVG(st.kunnen) as kunnen
             FROM learning_goals lg
             JOIN snapshots s ON lg.id = s.learning_goal_id
             JOIN snapshot_taxonomy st ON s.id = st.snapshot_id
+            JOIN entry_learning_goals elg ON lg.id = elg.learning_goal_id
+            JOIN entries e ON elg.entry_id = e.id
+            JOIN students stud ON e.student_id = stud.id
+            WHERE 1=1 {class_filter}
             GROUP BY lg.id, lg.title
             ORDER BY (AVG(st.kennen) + AVG(st.kunnen)) / 2 DESC
         """)
         goals = cur.fetchall()
         
         # Taxonomieniveaus
-        cur = self.con.execute("""
+        cur = self.con.execute(f"""
             SELECT st.level, AVG(st.kennen) as kennen, AVG(st.kunnen) as kunnen
             FROM snapshot_taxonomy st
+            JOIN snapshots s ON st.snapshot_id = s.id
+            JOIN entry_learning_goals elg ON s.learning_goal_id = elg.learning_goal_id
+            JOIN entries e ON elg.entry_id = e.id
+            JOIN students stud ON e.student_id = stud.id
+            WHERE 1=1 {class_filter}
             GROUP BY st.level
             ORDER BY (AVG(st.kennen) + AVG(st.kunnen)) / 2 ASC
         """)
         taxonomy = cur.fetchall()
         
         # Kernwoorden
-        cur = self.con.execute("""
+        cur = self.con.execute(f"""
             SELECT lkw.keyword, AVG(st.kennen) as kennen, AVG(st.kunnen) as kunnen
             FROM learning_goal_keywords lkw
             JOIN snapshots s ON lkw.learning_goal_id = s.learning_goal_id
             JOIN snapshot_taxonomy st ON s.id = st.snapshot_id
+            JOIN entry_learning_goals elg ON lkw.learning_goal_id = elg.learning_goal_id
+            JOIN entries e ON elg.entry_id = e.id
+            JOIN students stud ON e.student_id = stud.id
+            WHERE 1=1 {class_filter}
             GROUP BY lkw.keyword
             ORDER BY (AVG(st.kennen) + AVG(st.kunnen)) / 2 ASC
             LIMIT 10
