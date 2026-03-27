@@ -542,7 +542,7 @@ body {
 
 /* Scrollbare rechterkant */
 .scroll-container {
-    height: 100vh;
+    max-height: calc(100vh - 180px);
     overflow-y: auto;
     padding-right: 20px; /* more space so nothing hides */
 }
@@ -555,4 +555,10 @@ body {
 .scroll-container::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 10px;
+}
+.voldoende { 
+  background: rgb(116, 247, 116); 
+}
+.onvoldoende { 
+  background: rgb(255, 141, 141); 
 }

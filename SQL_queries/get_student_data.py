@@ -56,6 +56,7 @@ class GetStudentData:
                 {
                     "id": lg_id,
                     "title": lg["title"],
+                    "subject": lg["subject"],
                     "keywords": keywords,
                     "avg_kennen": avg_kennen,
                     "avg_kunnen": avg_kunnen,
@@ -93,10 +94,14 @@ class GetStudentData:
     def _get_learning_goals_for_student(self, student_id: int) -> list[sqlite3.Row]:
         cur = self.con.execute(
             """
-            SELECT DISTINCT lg.id, lg.title
+            SELECT DISTINCT 
+                lg.id, 
+                lg.title,
+                sub.name AS subject
             FROM learning_goals lg
             JOIN entry_learning_goals elg ON lg.id = elg.learning_goal_id
             JOIN entries e ON elg.entry_id = e.id
+            JOIN subjects sub ON e.subject_id = sub.id
             WHERE e.student_id = ?
             ORDER BY lg.title
             """,
