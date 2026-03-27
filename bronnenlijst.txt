@@ -1,3 +1,11 @@
 json load: https://www.geeksforgeeks.org/python/json-load-in-python/
 enforcing Foreign keys (database): https://sqlite.org/foreignkeys.html
 making relational links (database): 
+flask sessions: https://www.geeksforgeeks.org/python/python-flask-request-object/
+css classes explained: https://www.w3schools.com/cssref/sel_class.php
+colour names used in html page (for example login.html): https://www.w3schools.com/tags/ref_colornames.asp
+get_student_data.py only one value: https://stackoverflow.com/questions/66140957/sqlite-valueerror-parameters-are-of-unsupported-type
+bereken gemiddlede van list: https://stackoverflow.com/questions/9039961/finding-the-average-of-a-list
+random letter: https://stackoverflow.com/questions/16060899/alphabet-range-in-python
+first letter of email capitalized: https://www.w3schools.com/python/ref_string_capitalize.asp
+padding alleen link en rechts: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/padding

@@ -1,0 +1,49 @@
+{% extends "base.html" %} {% block content %}
+<!-- Docent Dashboard Content -->
+<link
+	rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='docentdashboard.js') }}"></script>
+<link
+	rel="stylesheet"
+	href="{{ url_for('static', filename='base.css') }}"
+/>
+	<!--main content-->
+	<div class="main-content">
+		<div class="header">
+			<div class="page-title">
+				<h1>Dashboard</h1>
+				<div class="page-subtitle">Welkom terug, {{ name }}.</div>
+			</div>
+		</div>
+		<!--type selector-->
+		<div class="student-selector">
+			<label for="studentSelect">Kies student:</label>
+			<select id="studentSelect">
+				{% for student in students %}
+				<option value="{{ student.id }}">{{ student.name }}</option>
+				{% endfor %}
+			</select>
+		</div>
+		<div style="width: 200px; margin: 20px auto; text-align: center">
+			<label for="chartTypeSelect">Kies type:</label>
+			<select id="chartTypeSelect">
+				<option value="all" selected>Alles</option>
+				<option value="quiz">Quiz</option>
+				<option value="project">Project</option>
+				<option value="test">Test</option>
+				<option value="observatie">Observatie</option>
+			</select>
+		</div>
+
+		<div
+			class="chart-container"
+			style="width: 90%; max-width: 1000px; margin: 40px auto; height: 400px"
+		>
+			<canvas id="myChart"></canvas>
+		</div>
+	</div>
+</div>
+{% endblock %}

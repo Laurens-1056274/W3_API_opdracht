@@ -1,0 +1,56 @@
+{% extends "base.html" %}{% block content %}
+
+<div class="main-content">
+
+    <div class="page-title">
+        <h1>Leerdoelen</h1>
+    </div>
+
+    <div style="padding: 0 20px; margin-bottom: 20px; text-align: center;">
+        <label for="chartTypeSelect">Kies vak:</label>
+        <select id="chartTypeSelect">
+            <option value="AlleVakken">Alle vakken</option>
+            <option value="Biologie">Biologie</option>
+            <option value="Natuurkunde">Natuurkunde</option>
+            <option value="Scheikunde">Scheikunde</option>
+            <option value="Wiskunde">Wiskunde</option>
+        </select>
+    </div>
+
+    <div class="scroll-container">
+
+        {% for x in learning_goals %}
+        <div class="learning-goal" data-subject="{{ x.subject }}">
+            <hr style="background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent);">
+            <h2 style="text-align: center;">{{ x.title }}:</h2>
+            <p>
+                Vak: {{ x.subject }}
+            </p>
+            <div class="profile-container">
+                <div class="profile-card">
+                    <p>Keywords: {{ x.keywords }}</p>
+                    <p>Gemiddelde Kennen:
+                        {% set status_kennen = "voldoende" if x.avg_kennen >= 0.55 else "onvoldoende" %}
+                        {{ x.avg_kennen }}
+                        <span class="{{ status_kennen }}" style="padding: 0 10px;">{{ status_kennen }}</span>
+                    </p>
+                    <p>Gemiddelde Kunnen:
+                        {% set status_kunnen = "voldoende" if x.avg_kunnen >= 0.55 else "onvoldoende" %}
+                        {{ x.avg_kunnen }}
+                        <span class="{{ status_kunnen }}"style="padding: 0 10px;"","padding-right: 10px";>
+                            {{ status_kunnen }}
+                        </span>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='learninggoals.js') }}"></script>
+
+{% endblock %}
