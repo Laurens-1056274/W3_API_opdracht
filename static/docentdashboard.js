@@ -1,17 +1,13 @@
 let allLearningGoals;
 let chart;
 let chartType = "all";
+const classSelect = document.getElementById("classSelect");
+const classOverviewBody = document.getElementById("classOverviewBody");
 
-fetch("/api/student/voortgang")
-	.then((res) => {
-		if (!res.ok) throw new Error("Niet ingelogd of serverfout");
-		return res.json();
-	})
-	.then((data) => {
-		allLearningGoals = data.learningGoals;
-		showChartByMonth(chartType);
-	})
-	.catch((err) => console.error("Error loading data:", err));
+if (classSelect?.value) {
+	loadClassData(classSelect.value);
+	loadClassOverview(classSelect.value);
+}
 
 
 document.getElementById("chartTypeSelect").addEventListener("change", (e) => {
@@ -20,20 +16,82 @@ document.getElementById("chartTypeSelect").addEventListener("change", (e) => {
 });
 
 
-document.getElementById("studentSelect").addEventListener("change", (e) => {
-	const studentId = e.target.value;
-
-	fetch(`/api/student/voortgang?student_id=${studentId}`)
-		.then((res) => res.json())
-		.then((data) => {
-			allLearningGoals = data.learningGoals;
-			showChartByMonth(chartType);
-		})
-		.catch((err) => console.error(err));
+classSelect?.addEventListener("change", (e) => {
+	const klas = e.target.value;
+	loadClassData(klas);
+	loadClassOverview(klas);
 });
 
 
+function loadClassData(klas) {
+	fetch(`/api/class/voortgang?klas=${encodeURIComponent(klas)}`)
+		.then((res) => {
+			if (!res.ok) throw new Error("Niet ingelogd of serverfout");
+			return res.json();
+		})
+		.then((data) => {
+			allLearningGoals = data.learningGoals || [];
+			showChartByMonth(chartType);
+		})
+		.catch((err) => console.error("Error loading class data:", err));
+}
+
+
+function loadClassOverview(klas) {
+	fetch(`/api/class/leerlingen?klas=${encodeURIComponent(klas)}`)
+		.then((res) => {
+			if (!res.ok) throw new Error("Kon klasoverzicht niet laden");
+			return res.json();
+		})
+		.then((data) => {
+			renderClassOverview(data.students || []);
+		})
+		.catch((err) => {
+			console.error("Error loading class overview:", err);
+			renderClassOverview([]);
+		});
+}
+
+
+function renderClassOverview(students) {
+	if (!classOverviewBody) return;
+
+	if (!Array.isArray(students) || students.length === 0) {
+		classOverviewBody.innerHTML = `
+			<tr>
+				<td colspan="5">Geen leerlingendata gevonden voor deze klas</td>
+			</tr>
+		`;
+		return;
+	}
+
+	classOverviewBody.innerHTML = students
+		.map(
+			(student) => `
+			<tr>
+				<td>${student.name ?? "-"}</td>
+				<td>${formatValue(student.avg_kennen)}</td>
+				<td>${formatValue(student.avg_kunnen)}</td>
+				<td>${formatValue(student.global_progress)}</td>
+				<td>${student.status ?? "-"}</td>
+			</tr>
+		`
+		)
+		.join("");
+}
+
+
+function formatValue(value) {
+	return value === null || value === undefined ? "-" : `${value}`;
+}
+
+
 function showChartByMonth(type) {
+	if (!Array.isArray(allLearningGoals) || allLearningGoals.length === 0) {
+		if (chart) chart.destroy();
+		return;
+	}
+
 	let monthlyData = {};
 
 	allLearningGoals.forEach((goal) => {
@@ -42,7 +100,7 @@ function showChartByMonth(type) {
 
 
 			if (type === "all" || sourceType === type.toLowerCase()) {
-				const month = snapshot.at.slice(0, 10);
+				const month = snapshot.at.slice(0, 7);
 
 				if (!monthlyData[month]) monthlyData[month] = [];
 				monthlyData[month].push(snapshot.taxonomy);
