@@ -1,27 +1,31 @@
 {% extends "base.html" %}{% block content %}
-<h1>Leerdoelen</h1>
 
-<div style="width: 200px; margin: 20px auto; text-align: center">
-    <label for="chartTypeSelect">Kies vak:</label>
-    <select id="chartTypeSelect">
-        <option value="AlleVakken">Alle vakken</option>
-        <option value="Biologie">Biologie</option>
-        <option value="Natuurkunde">Natuurkunde</option>
-        <option value="Scheikunde">Scheikunde</option>
-        <option value="Wiskunde">Wiskunde</option>
-    </select>
-</div>
+<div class="main-content">
 
-<div class="scroll-container">
-    {% for x in learning_goals %}
+    <div class="page-title">
+        <h1>Leerdoelen</h1>
+    </div>
+
+    <div style="padding: 0 20px; margin-bottom: 20px; text-align: center;">
+        <label for="chartTypeSelect">Kies vak:</label>
+        <select id="chartTypeSelect">
+            <option value="AlleVakken">Alle vakken</option>
+            <option value="Biologie">Biologie</option>
+            <option value="Natuurkunde">Natuurkunde</option>
+            <option value="Scheikunde">Scheikunde</option>
+            <option value="Wiskunde">Wiskunde</option>
+        </select>
+    </div>
+
+    <div class="scroll-container">
+
+        {% for x in learning_goals %}
         <div class="learning-goal" data-subject="{{ x.subject }}">
-            <hr>
-            <h2>{{ x.title }}:</h2>
-            <p style="display:inline; padding: 10px;">
+            <hr style="background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent);">
+            <h2 style="text-align: center;">{{ x.title }}:</h2>
+            <p>
                 Vak: {{ x.subject }}
             </p>
-            <hr>
-
             <div class="profile-container">
                 <div class="profile-card">
                     <p>Keywords: {{ x.keywords }}</p>
@@ -29,8 +33,12 @@
                     <p>Gemiddelde Kunnen: {{ x.avg_kunnen }}</p>
                 </div>
             </div>
+
         </div>
-    {% endfor %}
+        {% endfor %}
+
+    </div>
+
 </div>
 
 <script src="{{ url_for('static', filename='learninggoals.js') }}"></script>
