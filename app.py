@@ -118,5 +118,14 @@ def docent_voorbeeld():
                            user=session["user type"],
                            name=session.get('gebruikersnaam'))
 
+@app.route('/klas_analyse')
+def klas_analyse():
+    db = GetStudentData()
+    data = db.get_class_analysis()
+    db.close()
+    return render_template("/pages/docent/klas_analyse.html",
+                           user="docent",
+                           data=data)
+
 if __name__ == '__main__':
     app.run(debug=True)

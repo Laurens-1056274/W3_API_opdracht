@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Klasanalyse</h1>
+
+<h2>Leerdoelen</h2>
+{% for goal in data.goals %}
+<div>{{ goal.title }} - Kennen: {{ "%.0f"|format(goal.kennen * 100) }}%, Kunnen: {{ "%.0f"|format(goal.kunnen * 100) }}%</div>
+{% endfor %}
+
+<h2>Taxonomieniveaus</h2>
+{% for tax in data.taxonomy %}
+<div>{{ tax.level }} - Kennen: {{ "%.0f"|format(tax.kennen * 100) }}%, Kunnen: {{ "%.0f"|format(tax.kunnen * 100) }}%</div>
+{% endfor %}
+
+<h2>Kernwoorden</h2>
+{% for kw in data.keywords %}
+<div>{{ kw.keyword }} - Kennen: {{ "%.0f"|format(kw.kennen * 100) }}%, Kunnen: {{ "%.0f"|format(kw.kunnen * 100) }}%</div>
+{% endfor %}
+
+{% endblock %}

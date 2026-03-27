@@ -39,6 +39,13 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 				<span>Leerdoelen</span></a>
 			</div>
 			{%endif%}
+			{%if user=="docent"%}
+			<div class="nav-item">
+				<a href="{{url_for('klas_analyse')}}">
+				<i class="fa fa-chart-bar"></i>
+				<span>Klasanalyse</span></a>
+			</div>
+			{%endif%}
 			<div class="nav-item">
 				<a href="{{url_for('profiel')}}">
 				<i class="fa fa-user-circle"></i>
