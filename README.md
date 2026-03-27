@@ -64,8 +64,8 @@ Dit brengt jou dan naar de landing page waar je dus kan inloggen als student of 
 
 Hiervoor dus de test users:
 
-| Type    | Email          | Password          |
-| ------- | -------------- | ----------------- |
+| Type    | Email          | Password                              |
+| ------- | -------------- | ------------------------------------- |
 | Docent  | john@gmail.com | zie `teachers` tabel in `database.db` |
 | Student | sam@gmail.com  | zie `students` tabel in `database.db` |
 
