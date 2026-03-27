@@ -194,5 +194,20 @@ def docent_voorbeeld():
                            classes=classes)
 
 
+@app.route('/klas_analyse')
+def klas_analyse():
+    selected_class = request.args.get('klas')
+    db = GetStudentData()
+    data = db.get_class_analysis(selected_class)
+    # Haal beschikbare klassen op voor de dropdown
+    cur = db.con.execute("SELECT DISTINCT klas FROM students ORDER BY klas")
+    available_classes = [row[0] for row in cur.fetchall()]
+    db.close()
+    return render_template("/pages/docent/klas_analyse.html",
+                           user="docent",
+                           data=data,
+                           selected_class=selected_class,
+                           available_classes=available_classes)
+
 if __name__ == '__main__':
     app.run(debug=True)
