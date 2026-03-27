@@ -1,6 +1,14 @@
 import json
 import sqlite3
 import random
+import string
+
+def generate_password():
+    password = ''.join(
+        random.choice(random.choice(string.ascii_lowercase) + random.choice(string.ascii_uppercase))
+        for x in range(random.randint(7, 8)))
+    return password
+
 
 with open("data-sample-small.json", "r", encoding="utf-8") as f:
     data = json.load(f)
@@ -24,13 +32,17 @@ DROP TABLE IF EXISTS subjects;
 
 CREATE TABLE teachers (
   id INTEGER PRIMARY KEY,
-  name TEXT NOT NULL
+  name TEXT NOT NULL,
+  e_mail TEXT NOT NULL,
+  password TEXT NOT NULL               
 );
 
 CREATE TABLE students (
   id INTEGER PRIMARY KEY,
   name TEXT NOT NULL,
-  klas TEXT NOT NULL
+  klas TEXT NOT NULL,
+  e_mail TEXT NOT NULL,
+  password TEXT NOT NULL 
 );
 
 CREATE TABLE subjects (
@@ -114,13 +126,19 @@ def get_source_id(source_type, external_id):
     )
     return cur.fetchone()[0]
 
+example_teacher = 'John'
 
 with con:
     cur.execute("SELECT COUNT(*) FROM teachers")
     if cur.fetchone()[0] == 0:
         cur.execute(
-            "INSERT INTO teachers(id, name) VALUES(?, ?)",
-            (1, "John"),
+            "INSERT INTO teachers(id, name, e_mail, password) VALUES(?, ?, ?, ?)",
+            (
+                1,
+                example_teacher,
+                example_teacher + '@gmail.com',
+                generate_password(),
+            ),
         )
 
     for entry in data.get("entries", []):
@@ -135,9 +153,9 @@ with con:
             klas = random.choice(["1A", "1B", "1C"])
 
         cur.execute(
-            "INSERT INTO students(id, name, klas) VALUES(?, ?, ?) "
+            "INSERT INTO students(id, name, klas, e_mail, password) VALUES(?, ?, ?, ?, ?) "
             "ON CONFLICT(id) DO UPDATE SET name=excluded.name, klas=excluded.klas",
-            (student_id, student.get("name") or "", klas),
+            (student_id, student.get("name") or "", klas, student.get("name")+'@gmail.com',generate_password(), ),
         )
 
         cur.execute(
