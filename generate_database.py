@@ -2,11 +2,16 @@ import json
 import sqlite3
 import random
 import string
+import bcrypt
 
 def generate_password():
     password = ''.join(
         random.choice(random.choice(string.ascii_lowercase) + random.choice(string.ascii_uppercase))
         for x in range(random.randint(7, 8)))
+    bytes = password.encode('utf-8')
+    salt = bcrypt.gensalt()
+    hash = bcrypt.hashpw(bytes, salt)
+    password =  hash
     return password
 
 
