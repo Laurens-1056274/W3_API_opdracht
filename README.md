@@ -36,7 +36,7 @@ cd .\wp3-2026-rest-1c4-lion
 Maak de omgeving:
 
 ```shell
-py -m venv .venv
+python -m venv .venv
 ```
 
 Activeer de omgeving:
@@ -57,7 +57,7 @@ pip install -r requirements.txt
 Na het opstarten van de omgeving, graag de database maken met de volgende commando. Deze zal dus volgens het diagram hierboven gemaakt worden:
 
 ```shell
-py .\generate_database.py
+python .\generate_database.py
 ```
 
 ### Stap 3: Start de app
@@ -65,7 +65,7 @@ py .\generate_database.py
 De app wordt opgestart met het volgende commando:
 
 ```shell
-py .\app.py
+python .\app.py
 ```
 
 Dit brengt je naar de landing page waar je kan inloggen als student of docent
