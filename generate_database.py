@@ -4,10 +4,9 @@ import random
 import string
 import bcrypt
 
-def generate_password():
-    password = ''.join(
-        random.choice(random.choice(string.ascii_lowercase) + random.choice(string.ascii_uppercase))
-        for x in range(random.randint(7, 8)))
+def generate_password(username_to_password):
+    password = f"{username_to_password}123"
+    # If you want to check password easier, comment out row 10-13 (this will make it so the db displays the actual passwords)
     bytes = password.encode('utf-8')
     salt = bcrypt.gensalt()
     hash = bcrypt.hashpw(bytes, salt)
@@ -142,7 +141,7 @@ with con:
                 1,
                 example_teacher,
                 example_teacher + '@gmail.com',
-                generate_password(),
+                generate_password(example_teacher),
             ),
         )
 
@@ -160,7 +159,7 @@ with con:
         cur.execute(
             "INSERT INTO students(id, name, klas, e_mail, password) VALUES(?, ?, ?, ?, ?) "
             "ON CONFLICT(id) DO UPDATE SET name=excluded.name, klas=excluded.klas",
-            (student_id, student.get("name") or "", klas, student.get("name")+'@gmail.com',generate_password(), ),
+            (student_id, student.get("name") or "", klas, student.get("name")+'@gmail.com',generate_password(student.get("name")), ),
         )
 
         cur.execute(
