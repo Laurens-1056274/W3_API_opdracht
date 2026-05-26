@@ -18,6 +18,8 @@ def landlingpage():
 def studentdashboard():
     try:
         if session["user type"] == "leerling":
+            # something goes wrong here
+            print(session['gebruikersnaam'])
             pass
         else:
             return redirect('/')
