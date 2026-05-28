@@ -139,7 +139,9 @@ def check_gebruiker():
             user_exists = search_user(
                 session['email'], session['password']).search_leerling()
             session['gebruikersnaam'] = user_exists[0][1]
+            print(session['gebruikersnaam'] )
             session['gebruikers id'] = user_exists[0][0]
+            print(session['gebruikers id'])
             if user_exists:
                 return redirect("/studentdashboard")
 
@@ -148,7 +150,9 @@ def check_gebruiker():
                 session['email'], session['password']).search_docent()
             if user_exists:
                 session['gebruikersnaam'] = user_exists[0][1]
+                print(session['gebruikersnaam'] )
                 session['gebruikers id'] = user_exists[0][0]
+                print(session['gebruikers id'])
                 return redirect("/docentdashboard")
     except:
         return render_template("systeem/login.html", invalid_user=True, user=session["user type"])
