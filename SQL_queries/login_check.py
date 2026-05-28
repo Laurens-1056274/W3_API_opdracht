@@ -8,10 +8,13 @@ class search_user:
     self.password = password
     self.result = None
 
-  def search_leerling(self):
+
+  #only searches for studens atm
+  def search_user(self, userType):
+    print('ekjfoifwnoeggw')
     con = sqlite3.connect("database.db")
     cur = con.cursor()
-    cur.execute('SELECT password FROM STUDENTS WHERE e_mail = ? ', (self.e_mail,))
+    cur.execute(f'SELECT password FROM {userType} WHERE e_mail = ? ', (self.e_mail,))
     check_email = cur.fetchone()
     cur.close()
 
@@ -24,9 +27,10 @@ class search_user:
         # If true, make a querie that grabs he username and the gebruikers id. result send sthat back
         con = sqlite3.connect("database.db")
         cur = con.cursor()
-        cur.execute('SELECT id,name FROM STUDENTS WHERE e_mail = ? ', (self.e_mail,))
+        cur.execute(f'SELECT id,name FROM {userType} WHERE e_mail = ? ', (self.e_mail,))
         self.result = cur.fetchall()
         cur.close()
+        print(self.result)
         return self.result
       else:
         return self.result
