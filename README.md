@@ -72,7 +72,7 @@ Dit brengt je naar de landing page waar je kan inloggen als student of docent
 
 ![Landing Page](landing-page.png)
 
-Hiervoor dus de hebben we een aantal testusers (er staan meer in de database):
+Hiervoor dus de hebben we een aantal testusers (er staan meer gebruikers in de database):
 
 | Type    | Email          | Password |
 | ------- | -------------- | ---------|
@@ -80,8 +80,6 @@ Hiervoor dus de hebben we een aantal testusers (er staan meer in de database):
 | Student | sam@gmail.com  | Sam123   |
 | Student | alex@gmail.com | Alex123  |
 
-
-Ps alle wachtwoorden zijn de naam + 123
 
 <!-- How to login
 
