@@ -135,7 +135,7 @@ def check_gebruiker():
     try:
         if session["user type"] == "leerling":
             user_exists = search_user(
-                session['email'], session['password']).search_leerling()
+                session['email'], session['password']).search_user('students')
             session['gebruikersnaam'] = user_exists[0][1]
             session['gebruikers id'] = user_exists[0][0]
             if user_exists:
@@ -143,7 +143,7 @@ def check_gebruiker():
 
         elif session["user type"] == "docent":
             user_exists = search_user(
-                session['email'], session['password']).search_docent()
+                session['email'], session['password']).search_user('teachers')
             if user_exists:
                 session['gebruikersnaam'] = user_exists[0][1]
                 session['gebruikers id'] = user_exists[0][0]
