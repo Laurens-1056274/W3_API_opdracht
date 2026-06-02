@@ -30,12 +30,12 @@
                 <div class="profile-card">
                     <p>Keywords: {{ x.keywords }}</p>
                     <p>Gemiddelde Kennen:
-                        {% set status_kennen = "voldoende" if x.avg_kennen >= 0.55 else "onvoldoende" %}
+                        {% set status_kennen = "voldoende" if x.avg_kennen >= 5.5 else "onvoldoende" %}
                         {{ x.avg_kennen }}
                         <span class="{{ status_kennen }}" style="padding: 0 10px;">{{ status_kennen }}</span>
                     </p>
                     <p>Gemiddelde Kunnen:
-                        {% set status_kunnen = "voldoende" if x.avg_kunnen >= 0.55 else "onvoldoende" %}
+                        {% set status_kunnen = "voldoende" if x.avg_kunnen >= 5.5 else "onvoldoende" %}
                         {{ x.avg_kunnen }}
                         <span class="{{ status_kunnen }}"style="padding: 0 10px;"","padding-right: 10px";>
                             {{ status_kunnen }}
