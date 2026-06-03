@@ -35,7 +35,10 @@ function showChartByMonth(type) {
 		if (chart) chart.destroy();
 		return;
 	}
-	const labels = months;
+	const labels = months.map(m => {
+    const [year, month] = m.split("-");
+    return `${month}-${year}`;
+	});
 	const kennenData = [];
 	const kunnenData = [];
 	months.forEach((month) => {
