@@ -53,8 +53,9 @@ function showChartByMonth(type) {
 				count++;
 			});
 		});
-		kennenData.push(Math.round((kennenSum / count) * 100));
-		kunnenData.push(Math.round((kunnenSum / count) * 100));
+		kennenData.push(parseFloat(((kennenSum / count) * 10).toFixed(1)));
+		kunnenData.push(parseFloat(((kunnenSum / count) * 10).toFixed(1)));
+
 	});
 	if (chart) chart.destroy();
 	chart = new Chart(document.getElementById("myChart"), {
@@ -83,17 +84,17 @@ function showChartByMonth(type) {
 				},
 				title: {
 					display: true,
-					text: `Voortgang per maand (${type})`,
+					text: `Voortgang per maand (${type}) — 0-10`,
 					font: { size: 18, family: "Arial", weight: "bold" },
 				},
 			},
 			scales: {
 				y: {
 					beginAtZero: true,
-					max: 100,
+					max: 10,
 					ticks: {
 						font: { size: 12, family: "Arial" },
-						callback: (value) => value,
+						callback: (value) => value.toFixed(1),
 					},
 				},
 				x: { ticks: { font: { size: 12, family: "Arial" } } },
