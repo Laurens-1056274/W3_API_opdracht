@@ -55,7 +55,7 @@ function showChartByMonth(type) {
 	});
 	if (chart) chart.destroy();
 	chart = new Chart(document.getElementById("myChart"), {
-		type: "bar",
+		type: "line",
 		data: {
 			labels,
 			datasets: [
@@ -80,7 +80,7 @@ function showChartByMonth(type) {
 				},
 				title: {
 					display: true,
-					text: `Voortgang per Maand (${type})`,
+					text: `Voortgang per maand (${type})`,
 					font: { size: 18, family: "Arial", weight: "bold" },
 				},
 			},
