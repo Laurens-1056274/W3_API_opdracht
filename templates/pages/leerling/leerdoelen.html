@@ -28,7 +28,7 @@
             </p>
             <div class="profile-container">
                 <div class="profile-card">
-                    <p>Keywords: {{ x.keywords }}</p>
+                    <p>Kernwoorden bij dit leerdoel: {{ x.keywords | join(', ') }}</p>
                     <p>Gemiddelde Kennen:
                         {% set status_kennen = "voldoende" if x.avg_kennen >= 5.5 else "onvoldoende" %}
                         {{ x.avg_kennen }}
