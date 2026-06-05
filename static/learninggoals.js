@@ -40,13 +40,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 <div class="profile-container">
                     <div class="profile-card">
-                        <p>Kernwoorden bij dit leerdoel: ${x.keywords.join(", ")}</p>
-
+                        <p>Kernwoorden bij dit leerdoel:&nbsp;<b>${x.keywords.join(", ")}</b></p>
                         <p>
                             Gemiddelde cijfer: 
-                            ${((x.avg_kennen + x.avg_kunnen) / 2).toFixed(1)}
                             <span class="${((x.avg_kennen + x.avg_kunnen) / 2) >= 5.5 ? "voldoende" : "onvoldoende"}" style="padding: 0 10px;">
-                                ${((x.avg_kennen + x.avg_kunnen) / 2) >= 5.5 ? "voldoende" : "onvoldoende"}
+                                <b>${((x.avg_kennen + x.avg_kunnen) / 2).toFixed(1)}</b>
                             </span>
                         </p>
                     </div>
