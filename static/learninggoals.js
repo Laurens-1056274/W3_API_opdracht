@@ -43,16 +43,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         <p>Kernwoorden bij dit leerdoel: ${x.keywords.join(", ")}</p>
 
                         <p>
-                            Gemiddelde Kennen: ${x.avg_kennen}
-                            <span class="${x.avg_kennen >= 5.5 ? "voldoende" : "onvoldoende"}" style="padding: 0 10px;">
-                                ${x.avg_kennen >= 5.5 ? "voldoende" : "onvoldoende"}
-                            </span>
-                        </p>
-
-                        <p>
-                            Gemiddelde Kunnen: ${x.avg_kunnen}
-                            <span class="${x.avg_kunnen >= 5.5 ? "voldoende" : "onvoldoende"}" style="padding: 0 10px;">
-                                ${x.avg_kunnen >= 5.5 ? "voldoende" : "onvoldoende"}
+                            Gemiddelde cijfer: 
+                            ${((x.avg_kennen + x.avg_kunnen) / 2).toFixed(1)}
+                            <span class="${((x.avg_kennen + x.avg_kunnen) / 2) >= 5.5 ? "voldoende" : "onvoldoende"}" style="padding: 0 10px;">
+                                ${((x.avg_kennen + x.avg_kunnen) / 2) >= 5.5 ? "voldoende" : "onvoldoende"}
                             </span>
                         </p>
                     </div>
