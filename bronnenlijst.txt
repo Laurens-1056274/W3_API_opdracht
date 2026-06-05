@@ -11,3 +11,5 @@ first letter of email capitalized: https://www.w3schools.com/python/ref_string_c
 padding alleen link en rechts: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/padding
 Hashing wachtwoord: https://www.geeksforgeeks.org/python/hashing-passwords-in-python-with-bcrypt/
 filter output: https://jinja.palletsprojects.com/en/stable/templates/
+Ajax: https://www.youtube.com/watch?v=82hnvUYY6QA
+
