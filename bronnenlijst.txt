@@ -10,4 +10,6 @@ random letter: https://stackoverflow.com/questions/16060899/alphabet-range-in-py
 first letter of email capitalized: https://www.w3schools.com/python/ref_string_capitalize.asp
 padding alleen link en rechts: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/padding
 Hashing wachtwoord: https://www.geeksforgeeks.org/python/hashing-passwords-in-python-with-bcrypt/
-
+filter output: https://jinja.palletsprojects.com/en/stable/templates/
+Ajax: https://www.youtube.com/watch?v=82hnvUYY6QA
+non breaking space: https://www.w3schools.com/Html/html_entities.asp
