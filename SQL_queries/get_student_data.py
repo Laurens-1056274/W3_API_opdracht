@@ -58,8 +58,9 @@ class GetStudentData:
                     "title": lg["title"],
                     "subject": lg["subject"],
                     "keywords": keywords,
-                    "avg_kennen": avg_kennen,
-                    "avg_kunnen": avg_kunnen,
+                    # this makes is `normal` numbers students recognize
+                    "avg_kennen": round((avg_kennen * 10),1),
+                    "avg_kunnen": round((avg_kunnen * 10),1),
                     "snapshots": snapshots,
                 }
             )

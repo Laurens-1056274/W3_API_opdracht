@@ -72,12 +72,14 @@ Dit brengt je naar de landing page waar je kan inloggen als student of docent
 
 ![Landing Page](landing-page.png)
 
-Hiervoor dus de hebben we een aantal testusers:
+Hiervoor dus de hebben we een aantal testusers (er staan meer gebruikers in de database):
 
-| Type    | Email          | Password                              |
-| ------- | -------------- | ------------------------------------- |
-| Docent  | john@gmail.com | zie `teachers` tabel in `database.db` |
-| Student | sam@gmail.com  | zie `students` tabel in `database.db` |
+| Type    | Email          | Password |
+| ------- | -------------- | ---------|
+| Docent  | john@gmail.com | John123  |
+| Student | sam@gmail.com  | Sam123   |
+| Student | alex@gmail.com | Alex123  |
+
 
 <!-- How to login
 

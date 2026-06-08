@@ -1,33 +1,30 @@
 import sqlite3
+import bcrypt
 
 class search_user:
   def __init__(self, e_mail, password):
 
     self.e_mail = e_mail
     self.password = password
+    self.result = None
 
-  def search_leerling(self):
+  def search_user(self, userType):
     con = sqlite3.connect("database.db")
     cur = con.cursor()
-    cur.execute('SELECT id,name FROM STUDENTS WHERE e_mail = ? AND password = ?', (self.e_mail,self.password))
-    result = cur.fetchall()
-    print(result)
-    if len(result) == 1:
-      pass
-    else:
-      result = False
+    cur.execute(f'SELECT password FROM {userType} WHERE e_mail = ? ', (self.e_mail,))
+    check_email = cur.fetchone()
     cur.close()
-    return result
-  
-  def search_docent(self):
-    con = sqlite3.connect("database.db")
-    cur = con.cursor()
-    cur.execute('SELECT id,name FROM TEACHERS WHERE e_mail = ? AND password = ?', (self.e_mail,self.password))
-    result = cur.fetchall()
-    print(result)
-    if len(result) == 1:
-      pass
-    else:
-      result = False
-    cur.close()
-    return result
+
+    if check_email is not None:
+      password_bytes = self.password.encode('utf-8')
+      isSamePassword = bcrypt.checkpw(password_bytes, check_email[0])
+      if isSamePassword == True:
+        # If true, make a querie that grabs he username and the gebruikers id. result send sthat back
+        con = sqlite3.connect("database.db")
+        cur = con.cursor()
+        cur.execute(f'SELECT id,name FROM {userType} WHERE e_mail = ? ', (self.e_mail,))
+        self.result = cur.fetchall()
+        cur.close()
+        return self.result
+      else:
+        return self.result
