@@ -195,7 +195,7 @@ function showChartByMonth(type) {
 					max: 100,
 					title: {
 						display: true,
-						text: "Grade",
+						text: "Cijfer",
 					},
 					ticks: {
 						font: { size: 12, family: "Arial" },
