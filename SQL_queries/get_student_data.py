@@ -18,9 +18,11 @@ class GetStudentData:
     # Public API
     # ------------------------------------------------------------------
 
-    def get_learning_goal_overview(self, student_id: int) -> list[dict]:
+    def get_learning_goal_overview(self, student_id: int, subject: str = None) -> list[dict]:
         """Return all learning goals for *student_id* with keywords,
         snapshots and per-goal average kennen/kunnen scores.
+        
+        Optionally filter by subject.
 
         Returns a list of dicts:
         [
@@ -45,7 +47,7 @@ class GetStudentData:
           ...
         ]
         """
-        learning_goals = self._get_learning_goals_for_student(student_id)
+        learning_goals = self._get_learning_goals_for_student(student_id, subject)
         result = []
         for lg in learning_goals:
             lg_id = lg["id"]
@@ -92,22 +94,39 @@ class GetStudentData:
     # Private helpers
     # ------------------------------------------------------------------
 
-    def _get_learning_goals_for_student(self, student_id: int) -> list[sqlite3.Row]:
-        cur = self.con.execute(
-            """
-            SELECT DISTINCT 
-                lg.id, 
-                lg.title,
-                sub.name AS subject
-            FROM learning_goals lg
-            JOIN entry_learning_goals elg ON lg.id = elg.learning_goal_id
-            JOIN entries e ON elg.entry_id = e.id
-            JOIN subjects sub ON e.subject_id = sub.id
-            WHERE e.student_id = ?
-            ORDER BY lg.title
-            """,
-            (student_id,),
-        )
+    def _get_learning_goals_for_student(self, student_id: int, subject: str = None) -> list[sqlite3.Row]:
+        if subject:
+            cur = self.con.execute(
+                """
+                SELECT DISTINCT
+                    lg.id,
+                    lg.title,
+                    sub.name AS subject
+                FROM learning_goals lg
+                JOIN entry_learning_goals elg ON lg.id = elg.learning_goal_id
+                JOIN entries e ON elg.entry_id = e.id
+                JOIN subjects sub ON e.subject_id = sub.id
+                WHERE e.student_id = ? AND sub.name = ?
+                ORDER BY lg.title
+                """,
+                (student_id, subject),
+            )
+        else:
+            cur = self.con.execute(
+                """
+                SELECT DISTINCT
+                    lg.id,
+                    lg.title,
+                    sub.name AS subject
+                FROM learning_goals lg
+                JOIN entry_learning_goals elg ON lg.id = elg.learning_goal_id
+                JOIN entries e ON elg.entry_id = e.id
+                JOIN subjects sub ON e.subject_id = sub.id
+                WHERE e.student_id = ?
+                ORDER BY lg.title
+                """,
+                (student_id,),
+            )
         return cur.fetchall()
 
     def _get_keywords(self, learning_goal_id: str) -> list[str]:

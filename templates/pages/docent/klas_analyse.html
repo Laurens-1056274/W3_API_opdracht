@@ -60,20 +60,39 @@
         border: 1px solid #ced4da;
         border-radius: 3px;
     }
+    .loading {
+        text-align: center;
+        padding: 20px;
+        color: #666;
+    }
+
+    .error-message {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px 0;
+    }
 </style>
 
 <div class="page-container">
-    <h1>Klasanalyse{% if selected_class %} - Klas {{ selected_class }}{% endif %}</h1>
+    <h1 id="page-title">Klasanalyse{% if selected_class %} - Klas {{ selected_class }}{% endif %}</h1>
 
     <div class="class-selector">
         <label for="class-select">Selecteer klas:</label>
-        <select id="class-select" onchange="changeClass()">
+        <select id="class-select">
             <option value="">Alle klassen</option>
             {% for class_name in available_classes %}
             <option value="{{ class_name }}" {% if selected_class == class_name %}selected{% endif %}>{{ class_name }}</option>
             {% endfor %}
         </select>
     </div>
+
+    <div id="loading" class="loading" style="display: none;">
+        <p>Gegevens laden...</p>
+    </div>
+
+    <div id="error-container"></div>
 
     <div class="analysis-section">
         <h2>Leerdoelen</h2>
@@ -113,14 +132,70 @@
 </div>
 
 <script>
-function changeClass() {
-    const selectedClass = document.getElementById('class-select').value;
-    const url = selectedClass ? `/klas_analyse?klas=${selectedClass}` : '/klas_analyse';
-    window.location.href = url;
+function showLoading(show) {
+    document.getElementById('loading').style.display = show ? 'block' : 'none';
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Markeer zwakke scores
+function showError(message) {
+    const errorContainer = document.getElementById('error-container');
+    errorContainer.innerHTML = `<div class="error-message">${message}</div>`;
+}
+
+function clearError() {
+    document.getElementById('error-container').innerHTML = '';
+}
+
+function updatePageTitle(className) {
+    const title = className ? `Klasanalyse - Klas ${className}` : 'Klasanalyse';
+    document.getElementById('page-title').textContent = title;
+}
+
+function renderGoals(goals) {
+    const container = document.getElementById('goals-list');
+    if (!goals || goals.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #666;">Geen gegevens beschikbaar</p>';
+        return;
+    }
+    
+    container.innerHTML = goals.map(goal => `
+        <div class="data-item">
+            <span>${goal.title}</span>
+            <span class="score">Kennen: ${Math.round(goal.kennen * 100)}%, Kunnen: ${Math.round(goal.kunnen * 100)}%</span>
+        </div>
+    `).join('');
+}
+
+function renderTaxonomy(taxonomy) {
+    const container = document.getElementById('taxonomy-list');
+    if (!taxonomy || taxonomy.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #666;">Geen gegevens beschikbaar</p>';
+        return;
+    }
+    
+    container.innerHTML = taxonomy.map(tax => `
+        <div class="data-item">
+            <span>${tax.level}</span>
+            <span class="score">Kennen: ${Math.round(tax.kennen * 100)}%, Kunnen: ${Math.round(tax.kunnen * 100)}%</span>
+        </div>
+    `).join('');
+}
+
+function renderKeywords(keywords) {
+    const container = document.getElementById('keywords-list');
+    if (!keywords || keywords.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #666;">Geen gegevens beschikbaar</p>';
+        return;
+    }
+    
+    container.innerHTML = keywords.map(kw => `
+        <div class="data-item">
+            <span>${kw.keyword}</span>
+            <span class="score">Kennen: ${Math.round(kw.kennen * 100)}%, Kunnen: ${Math.round(kw.kunnen * 100)}%</span>
+        </div>
+    `).join('');
+}
+
+function markWeakScores() {
     const scores = document.querySelectorAll('.score');
     scores.forEach(score => {
         const text = score.textContent;
@@ -134,9 +209,63 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (avg < 40) {
                 score.classList.add('weak');
+            } else {
+                score.classList.remove('weak');
             }
         }
     });
+}
+
+function loadClassData(className) {
+    showLoading(true);
+    clearError();
+    
+    const url = className ? `/api/class/analyse?klas=${encodeURIComponent(className)}` : '/api/class/analyse';
+    
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Kon klasgegevens niet laden');
+            }
+            return response.json();
+        })
+        .then(result => {
+            showLoading(false);
+            updatePageTitle(result.class === 'Alle klassen' ? '' : result.class);
+            renderGoals(result.data.goals);
+            renderTaxonomy(result.data.taxonomy);
+            renderKeywords(result.data.keywords);
+            markWeakScores();
+            
+            // Update URL without reload
+            const newUrl = className ? `/klas_analyse?klas=${encodeURIComponent(className)}` : '/klas_analyse';
+            history.pushState({ klas: className }, '', newUrl);
+        })
+        .catch(error => {
+            showLoading(false);
+            showError('Fout bij het laden van gegevens: ' + error.message);
+            console.error('Error loading class data:', error);
+        });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const classSelect = document.getElementById('class-select');
+    
+    // Handle class selection change
+    classSelect.addEventListener('change', function() {
+        loadClassData(this.value);
+    });
+    
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', function(event) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const klas = urlParams.get('klas') || '';
+        classSelect.value = klas;
+        loadClassData(klas);
+    });
+    
+    // Mark weak scores on initial load
+    markWeakScores();
 });
 </script>
 
