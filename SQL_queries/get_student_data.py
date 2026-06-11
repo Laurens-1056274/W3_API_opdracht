@@ -87,6 +87,104 @@ class GetStudentData:
             (student_id,),
         )
         return [dict(row) for row in cur.fetchall()]
+    def get_keyword_analysis(self, student_id: int) -> list[dict]:
+        """Return keyword analysis for a student with individual scores.
+        
+        Returns a list of dicts:
+        [
+          {
+            "keyword": str,
+            "avg_kennen": float,
+            "avg_kunnen": float,
+            "learning_goals": [str, ...],
+            "snapshot_count": int,
+            "subject": str
+          },
+          ...
+        ]
+        Sorted by performance (weakest first for targeted learning).
+        """
+        # Get all keywords with their learning goals and scores
+        cur = self.con.execute(
+            """
+            SELECT 
+                lkw.keyword,
+                lg.id AS learning_goal_id,
+                lg.title AS learning_goal_title,
+                sub.name AS subject,
+                st.kennen,
+                st.kunnen
+            FROM learning_goal_keywords lkw
+            JOIN learning_goals lg ON lkw.learning_goal_id = lg.id
+            JOIN entry_learning_goals elg ON lg.id = elg.learning_goal_id
+            JOIN entries e ON elg.entry_id = e.id
+            JOIN subjects sub ON e.subject_id = sub.id
+            JOIN snapshots s ON lg.id = s.learning_goal_id
+            JOIN snapshot_taxonomy st ON s.id = st.snapshot_id
+            WHERE e.student_id = ?
+            ORDER BY lkw.keyword
+            """,
+            (student_id,),
+        )
+        
+        rows = cur.fetchall()
+        
+        # Group by keyword
+        keyword_data = {}
+        for row in rows:
+            keyword = row["keyword"]
+            if keyword not in keyword_data:
+                keyword_data[keyword] = {
+                    "keyword": keyword,
+                    "kennen_scores": [],
+                    "kunnen_scores": [],
+                    "learning_goals": {},
+                    "subjects": set(),
+                }
+            
+            keyword_data[keyword]["kennen_scores"].append(row["kennen"])
+            keyword_data[keyword]["kunnen_scores"].append(row["kunnen"])
+            # Store learning goal as dict with id and title
+            lg_id = row["learning_goal_id"]
+            if lg_id not in keyword_data[keyword]["learning_goals"]:
+                keyword_data[keyword]["learning_goals"][lg_id] = row["learning_goal_title"]
+            keyword_data[keyword]["subjects"].add(row["subject"])
+        
+        # Calculate averages and format result
+        result = []
+        for keyword, data in keyword_data.items():
+            kennen_vals = [k for k in data["kennen_scores"] if k is not None]
+            kunnen_vals = [k for k in data["kunnen_scores"] if k is not None]
+            
+            avg_kennen = round(sum(kennen_vals) / len(kennen_vals), 3) if kennen_vals else None
+            avg_kunnen = round(sum(kunnen_vals) / len(kunnen_vals), 3) if kunnen_vals else None
+            
+            # Convert to 0-10 scale
+            avg_kennen_scaled = round(avg_kennen * 10, 1) if avg_kennen is not None else None
+            avg_kunnen_scaled = round(avg_kunnen * 10, 1) if avg_kunnen is not None else None
+            
+            # Convert learning goals dict to list of objects with id and title
+            learning_goals_list = [
+                {"id": lg_id, "title": lg_title}
+                for lg_id, lg_title in sorted(data["learning_goals"].items())
+            ]
+            
+            result.append({
+                "keyword": keyword,
+                "avg_kennen": avg_kennen_scaled,
+                "avg_kunnen": avg_kunnen_scaled,
+                "learning_goals": learning_goals_list,
+                "snapshot_count": len(data["kennen_scores"]),
+                "subjects": sorted(list(data["subjects"]))
+            })
+        
+        # Sort by average performance (weakest first)
+        result.sort(key=lambda x: (
+            (x["avg_kennen"] or 0) + (x["avg_kunnen"] or 0)
+        ) / 2)
+        
+        return result
+
 
     # ------------------------------------------------------------------
     # Private helpers

@@ -45,6 +45,20 @@ def api_student_voortgang():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/student/keywords')
+def api_student_keywords():
+    student_id = session.get('gebruikers id')
+    if not student_id:
+        return jsonify({"error": "Niet ingelogd"}), 401
+    try:
+        db = GetStudentData()
+        keywords = db.get_keyword_analysis(int(student_id))
+        db.close()
+        return jsonify({"keywords": keywords})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 
 @app.route('/api/classes')
 def api_classes():
@@ -176,6 +190,24 @@ def leerdoelen():
         "/pages/leerling/leerdoelen.html",
         user=session["user type"],
         learning_goals=learning_goals)
+
+
+@app.route('/kernwoorden')
+def kernwoorden():
+    try:
+        if session["user type"] == "leerling":
+            pass
+        else:
+            return redirect('/')
+    except:
+        return redirect('/error_page')
+    
+    return render_template(
+        "/pages/leerling/kernwoorden.html",
+        user=session["user type"],
+        name=session.get('gebruikersnaam'),
+        student_id=session.get('gebruikers id')
+    )
 
 
 @app.route('/docentdashboard')
