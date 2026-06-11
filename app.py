@@ -202,5 +202,20 @@ def docent_voorbeeld():
                            name=session.get('gebruikersnaam'),
                            classes=classes)
 
+@app.route('/klas_analyse')
+def klas_analyse():
+    try:
+        if session["user type"] == "docent":
+            pass
+        else:
+            return redirect('/')
+
+    except:
+        return redirect('/error_page')
+
+    return render_template("/pages/docent/klas_analyse.html",
+                           user=session["user type"],
+                           name=session.get('gebruikersnaam'))
+
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,53 @@
+.filterbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: White;
+    width: 80%;
+    margin: 40px auto 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 20px;
+}
+
+.klas, .vakken {
+    margin: 0 10px;
+}
+
+.analyse {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 16px;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.leerdoelen {
+    padding: 20px;
+    border-radius: 6px;
+    min-width: 200px;
+    height: 600px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    flex: 1;
+}
+
+.taxonomieniveaus {
+    padding: 20px;
+    border-radius: 6px;
+    height: 600px;
+    min-width: 200px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    flex: 1;
+}
+
+.kernwoorden {
+    padding: 20px;
+    border-radius: 6px;
+    min-width: 200px;
+    height: 600px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    flex: 1;
+}

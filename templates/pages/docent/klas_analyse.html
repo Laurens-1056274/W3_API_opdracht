@@ -1,13 +1,39 @@
 {% extends "base.html" %}
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='klas_analyse.css') }}">
 <div class="filterbar">
-    <div>
+    <div class="klas">
         <select name="klas" id="klas">
             <option value="1A">1A</option>
             <option value="1B">1B</option>
             <option value="1C">1C</option>
         </select>
     </div>
+    <div class="vakken">
+        <select name="vakken" id="vakken">
+            <option value="Biologie">Biologie</option>
+            <option value="Natuurkunde">Natuurkunde</option>
+            <option value="Scheikunde">Scheikunde</option>
+            <option value="Wiskunde">Wiskunde</option>
+        </select>
+    </div>
 </div>
+
+<div class="analyse">
+    <div class="leerdoelen">
+        <div><p>Leerdoelen</p></div>
+
+    </div>
+    <div class="taxonomieniveaus">
+        <div><p>Taxonomieniveaus</p></div>
+
+    </div>
+    <div class="kernwoorden">
+        <div><p>Kernwoorden</p></div>
+
+</script>
+    </div>
+</div>
+
 
 {% endblock %}
