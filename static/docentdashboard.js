@@ -132,6 +132,12 @@ function showChartByMonth(type) {
 	const gradeData = [];
 	const medianValue = getMedian(allGrades);
 
+	// Display class average
+	const classAverageDisplay = document.getElementById("classAverageDisplay");
+	if (classAverageDisplay) {
+		classAverageDisplay.textContent = medianValue.toFixed(2);
+	}
+
 	dates.forEach((date) => {
 		const dateGrades = pointsByDate.get(date) || [];
 		const average = dateGrades.reduce((sum, value) => sum + value, 0) / dateGrades.length;
