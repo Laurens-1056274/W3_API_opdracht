@@ -94,7 +94,7 @@ function showChartByMonth(type) {
 
 	let monthlyData = {};
 
-	allLearningGoals.forEach((goal) => {
+	allLearningGoals.forEach((goal.avg_kennen + goal.avg_kunnen/2) => {
 		goal.snapshots.forEach((snapshot) => {
 			const sourceType = snapshot.source?.type?.toLowerCase() || "";
 

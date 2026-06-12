@@ -22,4 +22,4 @@ https://www.w3schools.com/css/css_border_rounded.asp
 https://www.w3schools.com/css/css_border_width.asp
 https://www.w3schools.com/css/css3_shadows_box.asp
 https://www.w3schools.com/cssref/css3_pr_gap.php
-https://claude.ai/chat/f3965ef1-faa0-49f9-8a35-6a75731e5003
+

@@ -2,14 +2,14 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='klas_analyse.css') }}">
 <div class="filterbar">
-    <div class="klas">
+    <div class="klas"> Filter op klas:
         <select name="klas" id="klas">
             <option value="1A">1A</option>
             <option value="1B">1B</option>
             <option value="1C">1C</option>
         </select>
     </div>
-    <div class="vakken">
+    <div class="vakken"> Filter op vak:
         <select name="vakken" id="vakken">
             <option value="Biologie">Biologie</option>
             <option value="Natuurkunde">Natuurkunde</option>
@@ -22,18 +22,30 @@
 <div class="analyse">
     <div class="leerdoelen">
         <div><p>Leerdoelen</p></div>
+            <div id="leerdoelenlijst">
+
+            </div>
 
     </div>
     <div class="taxonomieniveaus">
         <div><p>Taxonomieniveaus</p></div>
+            <div id="taxonomielijst">
+
+            </div>
 
     </div>
     <div class="kernwoorden">
         <div><p>Kernwoorden</p></div>
+            <div id="kernwoordenlijst">
 
-</script>
+            </div>
     </div>
 </div>
+
+<script>
+    const API_URL = {{ url_for("api_class_voortgang")|tojson }};
+</script>
+<script src="{{ url_for('static', filename='klas_analyse.js') }}"></script>
 
 
 {% endblock %}
