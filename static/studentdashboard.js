@@ -9,6 +9,7 @@ fetch("/api/student/voortgang")
 	})
 	.then((data) => {
 		allLearningGoals = data.learningGoals;
+		populateSubjectDropdown();
 		showChartByMonth(chartType);
 	})
 	.catch((err) => console.error("Error loading data:", err));
@@ -17,17 +18,39 @@ document.getElementById("chartTypeSelect").addEventListener("change", (e) => {
 	chartType = e.target.value;
 	showChartByMonth(chartType);
 });
+
+function populateSubjectDropdown() {
+	const subjects = new Set();
+	allLearningGoals.forEach((goal) => {
+		if (goal.subject) {
+			subjects.add(goal.subject);
+		}
+	});
+
+	const select = document.getElementById("chartTypeSelect");
+	select.innerHTML = '<option value="all">Alles</option>';
+
+	Array.from(subjects)
+		.sort()
+		.forEach((subject) => {
+			const option = document.createElement("option");
+			option.value = subject;
+			option.textContent = subject;
+			select.appendChild(option);
+		});
+}
+
 function showChartByMonth(type) {
 	let monthlyData = {};
 
 	allLearningGoals.forEach((goal) => {
-		goal.snapshots.forEach((snapshot) => {
-			if (type === "all" || snapshot.source.type === type) {
+		if (type === "all" || goal.subject === type) {
+			goal.snapshots.forEach((snapshot) => {
 				const month = snapshot.at.slice(0, 7);
 				if (!monthlyData[month]) monthlyData[month] = [];
 				monthlyData[month].push(snapshot.taxonomy);
-			}
-		});
+			});
+		}
 	});
 	const months = Object.keys(monthlyData).sort();
 	if (months.length === 0) {

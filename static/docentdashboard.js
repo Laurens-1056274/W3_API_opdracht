@@ -82,7 +82,7 @@ function renderClassOverview(students) {
 
 
 function formatValue(value) {
-	return value === null || value === undefined ? "-" : `${value}`;
+	return value === null || value === undefined ? "-" : `${(value / 10).toFixed(2)}`;
 }
 
 
@@ -94,55 +94,53 @@ function showChartByMonth(type) {
 
 	let monthlyData = {};
 
-	allLearningGoals.forEach((goal.avg_kennen + goal.avg_kunnen/2) => {
-		goal.snapshots.forEach((snapshot) => {
+	allLearningGoals.forEach((goal) => {
+		(goal.snapshots || []).forEach((snapshot) => {
 			const sourceType = snapshot.source?.type?.toLowerCase() || "";
+			const requestedType = type.toLowerCase();
+			const date = snapshot.at?.slice(0, 10);
 
-
-			if (type === "all" || sourceType === type.toLowerCase()) {
-				const month = snapshot.at.slice(0, 7);
-
-				if (!monthlyData[month]) monthlyData[month] = [];
-				monthlyData[month].push(snapshot.taxonomy);
+			if (!date || (type !== "all" && sourceType !== requestedType)) {
+				return;
 			}
+
+			const grade = getSnapshotGrade(snapshot.taxonomy);
+
+			if (grade === null) {
+				return;
+			}
+
+			if (!pointsByDate.has(date)) {
+				pointsByDate.set(date, []);
+			}
+
+			pointsByDate.get(date).push(grade);
+			allGrades.push(grade);
 		});
 	});
 
-	const months = Object.keys(monthlyData).sort();
+	const dates = Array.from(pointsByDate.keys()).sort();
 
-
-	if (months.length === 0) {
+	if (dates.length === 0) {
 		if (chart) chart.destroy();
 		console.warn("Geen data voor", type);
 		return;
 	}
 
-	const labels = months;
-	const kennenData = [];
-	const kunnenData = [];
+	const labels = dates.map(formatDateLabel);
+	const gradeData = [];
+	const medianValue = getMedian(allGrades);
 
-	months.forEach((month) => {
-		const monthSets = monthlyData[month];
+	// Display class average
+	const classAverageDisplay = document.getElementById("classAverageDisplay");
+	if (classAverageDisplay) {
+		classAverageDisplay.textContent = medianValue.toFixed(2);
+	}
 
-		let kennenSum = 0,
-			kunnenSum = 0,
-			count = 0;
-
-		monthSets.forEach((set) => {
-			set.forEach((t) => {
-				kennenSum += t.kennen;
-				kunnenSum += t.kunnen;
-				count++;
-			});
-		});
-
-		if (count === 0) {
-			kennenData.push(0);
-			kunnenData.push(0);
-		} else {
-			kennenData.push(Math.round((kennenSum / count) * 100));
-			kunnenData.push(Math.round((kunnenSum / count) * 100));
-		}
+	dates.forEach((date) => {
+		const dateGrades = pointsByDate.get(date) || [];
+		const average = dateGrades.reduce((sum, value) => sum + value, 0) / dateGrades.length;
+		gradeData.push(Math.round(average));
 	});
 
 
@@ -150,24 +148,33 @@ function showChartByMonth(type) {
 
 
 	chart = new Chart(document.getElementById("myChart"), {
-		type: "bar",
+		type: "line",
 		data: {
 			labels,
 			datasets: [
 				{
-					label: "Kennen",
-					data: kennenData,
-					backgroundColor: "rgba(0, 204, 102, 0.6)",
+					label: "Cijfer",
+					data: gradeData,
+					borderColor: "rgba(22, 172, 247, 1)",
+					backgroundColor: "rgba(22, 172, 247, 0.15)",
+					pointBackgroundColor: "rgba(22, 172, 247, 1)",
+					pointRadius: 4,
+					tension: 0.3,
+					fill: false,
 				},
 				{
-					label: "Kunnen",
-					data: kunnenData,
-					backgroundColor: "rgba(22, 172, 247, 0.6)",
+					label: "Gemiddelde",
+					data: labels.map(() => medianValue),
+					borderColor: "rgba(120, 120, 120, 0.9)",
+					borderDash: [2, 6],
+					pointRadius: 0,
+					fill: false,
 				},
 			],
 		},
 		options: {
 			responsive: true,
+			maintainAspectRatio: false,
 			plugins: {
 				legend: {
 					position: "top",
@@ -175,21 +182,77 @@ function showChartByMonth(type) {
 				},
 				title: {
 					display: true,
-					text: `Voortgang per Maand (${type})`,
+					text: `Voortgang per tijd (${type})`,
 					font: { size: 18, family: "Arial", weight: "bold" },
 				},
 			},
 			scales: {
 				y: {
 					beginAtZero: true,
-					max: 100,
+					max: 10,
+					title: {
+						display: true,
+						text: "Cijfer",
+					},
 					ticks: {
 						font: { size: 12, family: "Arial" },
-						callback: (value) => value,
+						callback: (value) => value.toFixed(2),
 					},
 				},
-				x: { ticks: { font: { size: 12, family: "Arial" } } },
+				x: {
+					title: {
+						display: true,
+						text: "Tijd",
+					},
+					ticks: { font: { size: 12, family: "Arial" } },
+				},
 			},
 		},
 	});
+}
+
+function getSnapshotGrade(taxonomy) {
+	if (!Array.isArray(taxonomy) || taxonomy.length === 0) {
+		return null;
+	}
+
+	let kennenSum = 0;
+	let kennenCount = 0;
+	let kunnenSum = 0;
+	let kunnenCount = 0;
+
+	taxonomy.forEach((item) => {
+		if (typeof item?.kennen === "number") {
+			kennenSum += item.kennen;
+			kennenCount++;
+		}
+		if (typeof item?.kunnen === "number") {
+			kunnenSum += item.kunnen;
+			kunnenCount++;
+		}
+	});
+
+	if (kennenCount === 0 && kunnenCount === 0) {
+		return null;
+	}
+
+	const kennenAverage = kennenCount > 0 ? kennenSum / kennenCount : null;
+	const kunnenAverage = kunnenCount > 0 ? kunnenSum / kunnenCount : null;
+	const parts = [kennenAverage, kunnenAverage].filter((value) => value !== null);
+
+	return Math.round((parts.reduce((sum, value) => sum + value, 0) / parts.length) * 10);
+}
+
+function getMedian(values) {
+	if (!Array.isArray(values) || values.length === 0) {
+		return 0;
+	}
+
+	const average = values.reduce((sum, value) => sum + value, 0) / values.length;
+	return Math.round(average * 100) / 100;
+}
+
+function formatDateLabel(dateValue) {
+	const [year, month, day] = dateValue.split("-");
+	return `${day}-${month}-${year}`;
 }
