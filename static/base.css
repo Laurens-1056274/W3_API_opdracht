@@ -256,6 +256,40 @@ p {
   padding: 16px;
 }
 
+.class-stats-card {
+  width: 90%;
+  max-width: 1000px;
+  margin: 20px auto;
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 16px;
+  display: flex;
+  gap: 20px;
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: #f5f7fb;
+  border-radius: var(--radius-sm);
+}
+
+.stat-label {
+  font-weight: 600;
+  color: var(--text);
+  margin-right: 10px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--primary);
+}
+
 .class-overview-table {
   width: 100%;
   border-collapse: collapse;
