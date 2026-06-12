@@ -92,7 +92,8 @@ function showChartByMonth(type) {
 		return;
 	}
 
-	let monthlyData = {};
+	const pointsByDate = new Map();
+	const allGrades = [];
 
 	allLearningGoals.forEach((goal) => {
 		(goal.snapshots || []).forEach((snapshot) => {
