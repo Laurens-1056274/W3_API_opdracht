@@ -30,23 +30,26 @@ function loadData() {
 function toonLeerdoelen(data) {
     const goals = data.learningGoals;
     const selectedVak = vakkenSelect.value;
-    var html = "";
+    let html = "";
  
-    for (var i = 0; i < goals.length; i++) {
-        var goal = goals[i];
+    for (let i = 0; i < goals.length; i++) {
+        let goal = goals[i];
  
         if (goal.subject == selectedVak) {
-            var gemiddelde = "Geen score";
+            let gemiddelde = "Geen score";
  
             if (goal.avg_kennen != null && goal.avg_kunnen != null) {
-                var som = goal.avg_kennen + goal.avg_kunnen;
-                var avg = som / 2;
-                gemiddelde = (avg * 10).toFixed(1);
+                let som = goal.avg_kennen + goal.avg_kunnen;
+                let avg = som / 2;
+                let score = (avg * 10).toFixed(1);
+                //We hebben gekozen voor 5.5 als voldoende. Dit kan worden aangepast naar wens van de opdrachtgever//
+                let css = score < 5.5 ? "onvoldoende" : "voldoende";
+                gemiddelde = "<span class='" + css + "'>" + score + "</span>";
+
             }
  
             html = html + "<div class='goal-item'>";
             html = html + "<h3>" + goal.title + "</h3>";
-            html = html + "<p>Vak: " + goal.subject + "</p>";
             html = html + "<p>Gemiddelde: " + gemiddelde + "</p>";
             html = html + "</div>";
         }
@@ -62,32 +65,34 @@ function toonLeerdoelen(data) {
 function toonTaxonomieniveaus(data) {
     const goals = data.learningGoals;
     const selectedVak = vakkenSelect.value;
-    var html = "";
+    let html = "";
  
-    for (var i = 0; i < goals.length; i++) {
-        var goal = goals[i];
+    for (let i = 0; i < goals.length; i++) {
+        let goal = goals[i];
  
         if (goal.subject == selectedVak) {
-            var snapshots = goal.snapshots;
-            var taxonomy = [];
+            let snapshots = goal.snapshots;
+            let taxonomy = [];
  
             if (snapshots.length > 0) {
-                var laatsteSnapshot = snapshots[snapshots.length - 1];
+                let laatsteSnapshot = snapshots[snapshots.length - 1];
                 taxonomy = laatsteSnapshot.taxonomy;
             }
  
             html = html + "<div class='goal-item'>";
             html = html + "<h3>" + goal.title + "</h3>";
-            html = html + "<p>Laatste taxonomie:</p>";
             html = html + "<ul>";
  
-            for (var j = 0; j < taxonomy.length; j++) {
-                var item = taxonomy[j];
-                html = html + "<li>" + item.level + ": kennen " + item.kennen + ", kunnen " + item.kunnen + "</li>";
+            for (let j = 0; j < taxonomy.length; j++) {
+                let item = taxonomy[j];
+                //We hebben gekozen voor 5.5 als voldoende. Dit kan worden aangepast naar wens van de opdrachtgever//
+                let kennen = item.kennen < 0.55 ? "onvoldoende" : "voldoende";
+                let kunnen = item.kunnen < 0.55 ? "onvoldoende" : "voldoende";
+
+                html = html + "<li>" + item.level +
+                ": kennen <span class='" + kennen + "'>" + item.kennen + "</span>" +
+                ", kunnen <span class='" + kunnen + "'>" + item.kunnen + "</span></li>";
             }
- 
-            html = html + "</ul>";
-            html = html + "</div>";
         }
     }
  
@@ -101,25 +106,28 @@ function toonTaxonomieniveaus(data) {
 function toonKernwoorden(data) {
     const goals = data.learningGoals;
     const selectedVak = vakkenSelect.value;
-    var kernwoorden = [];
-    var html = "";
+    let html = "";
  
-    for (var i = 0; i < goals.length; i++) {
-        var goal = goals[i];
+    for (let i = 0; i < goals.length; i++) {
+        let goal = goals[i];
  
         if (goal.subject == selectedVak) {
-            for (var j = 0; j < goal.keywords.length; j++) {
-                var keyword = goal.keywords[j];
+            
+            html = html + "<div class='keyword-goal-group'>";
+            html = html + "<h4>" + goal.title + "</h4>";
+            html = html + "<div class='keyword-group'>";
  
-                if (kernwoorden.indexOf(keyword) == -1) {
-                    kernwoorden.push(keyword);
-                }
+            for (let j = 0; j < goal.keywords.length; j++) {
+                let keyword = goal.keywords[j];
+
+                html = html + "<span class='kernwoorden-overzicht'>" + keyword + "</span>";
             }
-        }
-    }
+
+
  
-    for (var i = 0; i < kernwoorden.length; i++) {
-        html = html + "<span class='keyword-chip'>" + kernwoorden[i] + "</span>";
+            html = html + "</div>";
+            html = html + "</div>";
+        }
     }
  
     if (html == "") {

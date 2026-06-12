@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='klas_analyse.css') }}">
+<div class="main-content">
+	<div class="header">
+		<div class="page-title">
+			<h1>Klasanalyse</h1>
+		</div>
+	</div>
 <div class="filterbar">
     <div class="klas"> Filter op klas:
         <select name="klas" id="klas">
@@ -28,7 +34,7 @@
 
     </div>
     <div class="taxonomieniveaus">
-        <div><p>Taxonomieniveaus</p></div>
+        <div><p>Taxonomie</p></div>
             <div id="taxonomielijst">
 
             </div>

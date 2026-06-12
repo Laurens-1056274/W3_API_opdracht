@@ -28,7 +28,9 @@
     padding: 20px;
     border-radius: 6px;
     min-width: 200px;
-    height: 600px;
+    height: 700px;
+    overflow-y: auto;
+    background-color: White;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     flex: 1;
 }
@@ -36,8 +38,10 @@
 .taxonomieniveaus {
     padding: 20px;
     border-radius: 6px;
-    height: 600px;
+    height: 700px;
     min-width: 200px;
+    overflow-y: auto;
+    background-color: White;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     flex: 1;
 }
@@ -46,7 +50,32 @@
     padding: 20px;
     border-radius: 6px;
     min-width: 200px;
-    height: 600px;
+    height: 700px;
+    overflow-y: auto;
+    background-color: White;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     flex: 1;
+}
+
+.voldoende {
+    color: blue ;
+    font-weight: 600;
+    background-color: white;
+}
+
+.onvoldoende {
+    color: red;
+    font-weight: 600;
+    background-color: white;
+}
+
+.kernwoorden-overzicht {
+    display: flex;
+    margin: 6px;
+    padding: 6px;
+    background: #f5f7fb;
+    border: 1px solid #00000014;
+    color: rgba(34, 34, 51, 0.785);
+    border-radius: 14px;
+    max-width: 200px;
 }
