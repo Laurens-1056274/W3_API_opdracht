@@ -241,13 +241,13 @@ function createKeywordCard(keyword) {
 
 function getStrengthCategory(score) {
     if (score >= 7.0) return 'strong';
-    if (score >= 4.0) return 'moderate';
+    if (score >= 5.5) return 'moderate';
     return 'weak';
 }
 
 function getStrengthLabel(score) {
     if (score >= 7.0) return 'Goed';
-    if (score >= 4.0) return 'Voldoende';
+    if (score >= 5.5) return 'Voldoende';
     return 'Aandacht nodig';
 }
 
