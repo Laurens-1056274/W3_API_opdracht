@@ -1,272 +1,57 @@
 {% extends "base.html" %}
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}"/>
-
-<style>
-    .analysis-section {
-        margin: 20px 0;
-        padding: 15px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        background: #f9f9f9;
-    }
-
-    .analysis-section h2 {
-        margin-top: 0;
-        color: #333;
-        border-bottom: 2px solid #007bff;
-        padding-bottom: 5px;
-    }
-
-    .data-item {
-        padding: 8px 0;
-        border-bottom: 1px solid #eee;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .data-item:last-child {
-        border-bottom: none;
-    }
-
-    .score {
-        font-weight: bold;
-        color: #007bff;
-    }
-
-    .weak {
-        color: #dc3545;
-    }
-
-    .page-container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        height: 100vh;
-        overflow-y: auto;
-    }
-
-    .class-selector {
-        margin-bottom: 20px;
-        padding: 10px;
-        background: #f8f9fa;
-        border-radius: 5px;
-        border: 1px solid #dee2e6;
-    }
-
-    .class-selector select {
-        padding: 5px 10px;
-        border: 1px solid #ced4da;
-        border-radius: 3px;
-    }
-    .loading {
-        text-align: center;
-        padding: 20px;
-        color: #666;
-    }
-
-    .error-message {
-        background: #f8d7da;
-        color: #721c24;
-        padding: 10px;
-        border-radius: 5px;
-        margin: 10px 0;
-    }
-</style>
-
-<div class="page-container">
-    <h1 id="page-title">Klasanalyse{% if selected_class %} - Klas {{ selected_class }}{% endif %}</h1>
-
-    <div class="class-selector">
-        <label for="class-select">Selecteer klas:</label>
-        <select id="class-select">
-            <option value="">Alle klassen</option>
-            {% for class_name in available_classes %}
-            <option value="{{ class_name }}" {% if selected_class == class_name %}selected{% endif %}>{{ class_name }}</option>
-            {% endfor %}
+<link rel="stylesheet" href="{{ url_for('static', filename='klas_analyse.css') }}">
+<div class="main-content">
+	<div class="header">
+		<div class="page-title">
+			<h1>Klasanalyse</h1>
+		</div>
+	</div>
+<div class="filterbar">
+    <div class="klas"> Filter op klas:
+        <select name="klas" id="klas">
+            <option value="1A">1A</option>
+            <option value="1B">1B</option>
+            <option value="1C">1C</option>
         </select>
     </div>
-
-    <div id="loading" class="loading" style="display: none;">
-        <p>Gegevens laden...</p>
+    <div class="vakken"> Filter op vak:
+        <select name="vakken" id="vakken">
+            <option value="Biologie">Biologie</option>
+            <option value="Natuurkunde">Natuurkunde</option>
+            <option value="Scheikunde">Scheikunde</option>
+            <option value="Wiskunde">Wiskunde</option>
+        </select>
     </div>
+</div>
 
-    <div id="error-container"></div>
+<div class="analyse">
+    <div class="leerdoelen">
+        <div><p>Leerdoelen</p></div>
+            <div id="leerdoelenlijst">
 
-    <div class="analysis-section">
-        <h2>Leerdoelen</h2>
-        <div id="goals-list">
-            {% for goal in data.goals %}
-            <div class="data-item">
-                <span>{{ goal.title }}</span>
-                <span class="score">Kennen: {{ "%.0f"|format(goal.kennen * 100) }}%, Kunnen: {{ "%.0f"|format(goal.kunnen * 100) }}%</span>
             </div>
-            {% endfor %}
-        </div>
+
     </div>
+    <div class="taxonomieniveaus">
+        <div><p>Kennen en Kunnen</p></div>
+            <div id="taxonomielijst">
 
-    <div class="analysis-section">
-        <h2>Taxonomieniveaus</h2>
-        <div id="taxonomy-list">
-            {% for tax in data.taxonomy %}
-            <div class="data-item">
-                <span>{{ tax.level }}</span>
-                <span class="score">Kennen: {{ "%.0f"|format(tax.kennen * 100) }}%, Kunnen: {{ "%.0f"|format(tax.kunnen * 100) }}%</span>
             </div>
-            {% endfor %}
-        </div>
+
     </div>
+    <div class="kernwoorden">
+        <div><p>Kernwoorden</p></div>
+            <div id="kernwoordenlijst">
 
-    <div class="analysis-section">
-        <h2>Kernwoorden</h2>
-        <div id="keywords-list">
-            {% for kw in data.keywords %}
-            <div class="data-item">
-                <span>{{ kw.keyword }}</span>
-                <span class="score">Kennen: {{ "%.0f"|format(kw.kennen * 100) }}%, Kunnen: {{ "%.0f"|format(kw.kunnen * 100) }}%</span>
             </div>
-            {% endfor %}
-        </div>
     </div>
 </div>
 
 <script>
-function showLoading(show) {
-    document.getElementById('loading').style.display = show ? 'block' : 'none';
-}
-
-function showError(message) {
-    const errorContainer = document.getElementById('error-container');
-    errorContainer.innerHTML = `<div class="error-message">${message}</div>`;
-}
-
-function clearError() {
-    document.getElementById('error-container').innerHTML = '';
-}
-
-function updatePageTitle(className) {
-    const title = className ? `Klasanalyse - Klas ${className}` : 'Klasanalyse';
-    document.getElementById('page-title').textContent = title;
-}
-
-function renderGoals(goals) {
-    const container = document.getElementById('goals-list');
-    if (!goals || goals.length === 0) {
-        container.innerHTML = '<p style="text-align: center; color: #666;">Geen gegevens beschikbaar</p>';
-        return;
-    }
-    
-    container.innerHTML = goals.map(goal => `
-        <div class="data-item">
-            <span>${goal.title}</span>
-            <span class="score">Kennen: ${Math.round(goal.kennen * 100)}%, Kunnen: ${Math.round(goal.kunnen * 100)}%</span>
-        </div>
-    `).join('');
-}
-
-function renderTaxonomy(taxonomy) {
-    const container = document.getElementById('taxonomy-list');
-    if (!taxonomy || taxonomy.length === 0) {
-        container.innerHTML = '<p style="text-align: center; color: #666;">Geen gegevens beschikbaar</p>';
-        return;
-    }
-    
-    container.innerHTML = taxonomy.map(tax => `
-        <div class="data-item">
-            <span>${tax.level}</span>
-            <span class="score">Kennen: ${Math.round(tax.kennen * 100)}%, Kunnen: ${Math.round(tax.kunnen * 100)}%</span>
-        </div>
-    `).join('');
-}
-
-function renderKeywords(keywords) {
-    const container = document.getElementById('keywords-list');
-    if (!keywords || keywords.length === 0) {
-        container.innerHTML = '<p style="text-align: center; color: #666;">Geen gegevens beschikbaar</p>';
-        return;
-    }
-    
-    container.innerHTML = keywords.map(kw => `
-        <div class="data-item">
-            <span>${kw.keyword}</span>
-            <span class="score">Kennen: ${Math.round(kw.kennen * 100)}%, Kunnen: ${Math.round(kw.kunnen * 100)}%</span>
-        </div>
-    `).join('');
-}
-
-function markWeakScores() {
-    const scores = document.querySelectorAll('.score');
-    scores.forEach(score => {
-        const text = score.textContent;
-        const kennenMatch = text.match(/Kennen: (\d+)%/);
-        const kunnenMatch = text.match(/Kunnen: (\d+)%/);
-
-        if (kennenMatch && kunnenMatch) {
-            const kennen = parseInt(kennenMatch[1]);
-            const kunnen = parseInt(kunnenMatch[1]);
-            const avg = (kennen + kunnen) / 2;
-
-            if (avg < 40) {
-                score.classList.add('weak');
-            } else {
-                score.classList.remove('weak');
-            }
-        }
-    });
-}
-
-function loadClassData(className) {
-    showLoading(true);
-    clearError();
-    
-    const url = className ? `/api/class/analyse?klas=${encodeURIComponent(className)}` : '/api/class/analyse';
-    
-    fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Kon klasgegevens niet laden');
-            }
-            return response.json();
-        })
-        .then(result => {
-            showLoading(false);
-            updatePageTitle(result.class === 'Alle klassen' ? '' : result.class);
-            renderGoals(result.data.goals);
-            renderTaxonomy(result.data.taxonomy);
-            renderKeywords(result.data.keywords);
-            markWeakScores();
-            
-            // Update URL without reload
-            const newUrl = className ? `/klas_analyse?klas=${encodeURIComponent(className)}` : '/klas_analyse';
-            history.pushState({ klas: className }, '', newUrl);
-        })
-        .catch(error => {
-            showLoading(false);
-            showError('Fout bij het laden van gegevens: ' + error.message);
-            console.error('Error loading class data:', error);
-        });
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    const classSelect = document.getElementById('class-select');
-    
-    // Handle class selection change
-    classSelect.addEventListener('change', function() {
-        loadClassData(this.value);
-    });
-    
-    // Handle browser back/forward buttons
-    window.addEventListener('popstate', function(event) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const klas = urlParams.get('klas') || '';
-        classSelect.value = klas;
-        loadClassData(klas);
-    });
-    
-    // Mark weak scores on initial load
-    markWeakScores();
-});
+    const API_URL = {{ url_for("api_class_voortgang")|tojson }};
 </script>
+<script src="{{ url_for('static', filename='klas_analyse.js') }}"></script>
+
 
 {% endblock %}

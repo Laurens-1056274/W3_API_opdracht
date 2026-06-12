@@ -260,21 +260,20 @@ def docent_voorbeeld():
                            name=session.get('gebruikersnaam'),
                            classes=classes)
 
-
 @app.route('/klas_analyse')
 def klas_analyse():
-    selected_class = request.args.get('klas')
-    db = GetStudentData()
-    data = db.get_class_analysis(selected_class)
-    # Haal beschikbare klassen op voor de dropdown
-    cur = db.con.execute("SELECT DISTINCT klas FROM students ORDER BY klas")
-    available_classes = [row[0] for row in cur.fetchall()]
-    db.close()
+    try:
+        if session["user type"] == "docent":
+            pass
+        else:
+            return redirect('/')
+
+    except:
+        return redirect('/error_page')
+
     return render_template("/pages/docent/klas_analyse.html",
-                           user="docent",
-                           data=data,
-                           selected_class=selected_class,
-                           available_classes=available_classes)
+                           user=session["user type"],
+                           name=session.get('gebruikersnaam'))
 
 if __name__ == '__main__':
     app.run(debug=True)
