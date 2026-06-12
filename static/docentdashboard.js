@@ -82,7 +82,7 @@ function renderClassOverview(students) {
 
 
 function formatValue(value) {
-	return value === null || value === undefined ? "-" : `${value}`;
+	return value === null || value === undefined ? "-" : `${(value / 10).toFixed(2)}`;
 }
 
 
@@ -158,15 +158,7 @@ function showChartByMonth(type) {
 					fill: false,
 				},
 				{
-					label: "Voldoende (55)",
-					data: labels.map(() => 55),
-					borderColor: "rgba(0, 153, 0, 0.9)",
-					borderDash: [6, 6],
-					pointRadius: 0,
-					fill: false,
-				},
-				{
-					label: "Mediaan klas",
+					label: "Gemiddelde",
 					data: labels.map(() => medianValue),
 					borderColor: "rgba(120, 120, 120, 0.9)",
 					borderDash: [2, 6],
@@ -192,14 +184,14 @@ function showChartByMonth(type) {
 			scales: {
 				y: {
 					beginAtZero: true,
-					max: 100,
+					max: 10,
 					title: {
 						display: true,
 						text: "Cijfer",
 					},
 					ticks: {
 						font: { size: 12, family: "Arial" },
-						callback: (value) => value,
+						callback: (value) => value.toFixed(2),
 					},
 				},
 				x: {
@@ -243,7 +235,7 @@ function getSnapshotGrade(taxonomy) {
 	const kunnenAverage = kunnenCount > 0 ? kunnenSum / kunnenCount : null;
 	const parts = [kennenAverage, kunnenAverage].filter((value) => value !== null);
 
-	return Math.round((parts.reduce((sum, value) => sum + value, 0) / parts.length) * 100);
+	return Math.round((parts.reduce((sum, value) => sum + value, 0) / parts.length) * 10);
 }
 
 function getMedian(values) {
@@ -251,14 +243,8 @@ function getMedian(values) {
 		return 0;
 	}
 
-	const sorted = [...values].sort((a, b) => a - b);
-	const middle = Math.floor(sorted.length / 2);
-
-	if (sorted.length % 2 === 0) {
-		return Math.round((sorted[middle - 1] + sorted[middle]) / 2);
-	}
-
-	return Math.round(sorted[middle]);
+	const average = values.reduce((sum, value) => sum + value, 0) / values.length;
+	return Math.round(average * 100) / 100;
 }
 
 function formatDateLabel(dateValue) {
