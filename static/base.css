@@ -584,10 +584,6 @@ button:hover {
     }
 }
 
-body {
-    overflow: hidden;
-}
-
 /* Scrollbare rechterkant */
 .scroll-container {
     max-height: calc(100vh - 180px);
