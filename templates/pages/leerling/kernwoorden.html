@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="main-content">
+
+    <div class="page-title">
+        <h1>Kernwoorden Analyse</h1>
+        <p style="color: #718096; font-size: 0.9rem;">Bekijk je prestaties per kernwoord</p>
+    </div>
+
+    <div style="padding: 0 20px; margin-bottom: 20px;">
+        <div style="display: flex; gap: 15px; justify-content: center; align-items: center; flex-wrap: wrap;">
+            <div>
+                <label for="subjectFilter">Filter op vak:</label>
+                <select id="subjectFilter" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #d0d5dd;">
+                    <option value="all">Alle vakken</option>
+                </select>
+            </div>
+            <div>
+                <label for="sortSelect">Sorteer op:</label>
+                <select id="sortSelect" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #d0d5dd;">
+                    <option value="performance">Prestatie (zwakste eerst)</option>
+                    <option value="alphabetical">Alfabetisch</option>
+                    <option value="kennen">Kennen score</option>
+                    <option value="kunnen">Kunnen score</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div id="loadingMessage" style="text-align: center; padding: 40px; font-size: 1.1rem; color: #718096;">
+        <i class="fa fa-spinner fa-spin"></i> Laden...
+    </div>
+
+    <div id="noResults" style="display:none; text-align:center; padding: 40px;">
+        <h2 style="color: #718096;">Geen kernwoorden gevonden</h2>
+        <p>Er zijn nog geen kernwoorden beschikbaar voor de geselecteerde filters.</p>
+    </div>
+
+    <!-- Keywords will be inserted here by JavaScript -->
+    <div id="keywordsContainer" class="keywords-grid" style="display: none;"></div>
+
+</div>
+
+<style>
+.keywords-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.keyword-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border-left: 4px solid #e0e6ed;
+}
+
+.keyword-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.keyword-card.weak {
+    border-left-color: #dc3545;
+}
+
+.keyword-card.moderate {
+    border-left-color: #ffc107;
+}
+
+.keyword-card.strong {
+    border-left-color: #28a745;
+}
+
+.keyword-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.keyword-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2d3748;
+}
+
+.keyword-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+}
+
+.keyword-badge.weak {
+    background-color: #dc3545;
+}
+
+.keyword-badge.moderate {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.keyword-badge.strong {
+    background-color: #28a745;
+}
+
+.keyword-scores {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.score-item {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    background: #f7f9fc;
+    border-radius: 6px;
+}
+
+.score-label {
+    font-size: 0.85rem;
+    color: #718096;
+    margin-bottom: 5px;
+}
+
+.score-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2d3748;
+}
+
+.keyword-progress {
+    margin-bottom: 15px;
+}
+
+.progress-bar-container {
+    background: #e0e6ed;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.progress-bar {
+    height: 100%;
+    transition: width 0.3s ease;
+    border-radius: 4px;
+}
+
+.progress-bar.weak {
+    background: linear-gradient(90deg, #dc3545, #ff6b7a);
+}
+
+.progress-bar.moderate {
+    background: linear-gradient(90deg, #ffc107, #ffd54f);
+}
+
+.progress-bar.strong {
+    background: linear-gradient(90deg, #28a745, #5cb85c);
+}
+
+.keyword-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #718096;
+    padding-top: 10px;
+    border-top: 1px solid #e0e6ed;
+}
+
+.keyword-subjects {
+    font-size: 0.85rem;
+    color: #4895ef;
+    margin-bottom: 8px;
+}
+
+.keyword-goals {
+    font-size: 0.85rem;
+    color: #718096;
+}
+
+.keyword-goals-list {
+    display: none;
+    margin-top: 10px;
+    padding: 10px;
+    background: #f7f9fc;
+    border-radius: 6px;
+    font-size: 0.85rem;
+}
+
+.keyword-goals-list.show {
+    display: block;
+}
+
+.goal-item {
+    padding: 5px 0;
+    color: #2d3748;
+}
+</style>
+
+<script src="{{ url_for('static', filename='keywords.js') }}"></script>
+
+{% endblock %}

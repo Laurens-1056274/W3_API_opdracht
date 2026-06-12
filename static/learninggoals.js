@@ -1,3 +1,5 @@
+let selectedKeyword = null;
+
 function applyFilter() {
     const select = document.getElementById("chartTypeSelect");
     const noResults = document.getElementById("noResults");
@@ -8,8 +10,12 @@ function applyFilter() {
 
     items.forEach(item => {
         const subject = item.getAttribute("data-subject");
+        const keywords = item.getAttribute("data-keywords");
 
-        if (selected === "AlleVakken" || selected === subject) {
+        let matchesSubject = selected === "AlleVakken" || selected === subject;
+        let matchesKeyword = !selectedKeyword || keywords.includes(selectedKeyword);
+
+        if (matchesSubject && matchesKeyword) {
             item.style.display = "block";
             visibleCount++;
         } else {
@@ -18,6 +24,30 @@ function applyFilter() {
     });
     noResults.style.display = visibleCount === 0 ? "block" : "none";
 }
+
+function filterByKeyword(keyword) {
+    selectedKeyword = keyword;
+    
+    // Update active state of keyword tags
+    document.querySelectorAll(".keyword-tag").forEach(tag => {
+        if (tag.textContent === keyword) {
+            tag.classList.add("active");
+        } else {
+            tag.classList.remove("active");
+        }
+    });
+    
+    applyFilter();
+}
+
+function clearKeywordFilter() {
+    selectedKeyword = null;
+    document.querySelectorAll(".keyword-tag").forEach(tag => {
+        tag.classList.remove("active");
+    });
+    applyFilter();
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     const select = document.getElementById("chartTypeSelect");
     const container = document.querySelector(".scroll-container");
@@ -33,6 +63,13 @@ document.addEventListener("DOMContentLoaded", function () {
             const div = document.createElement("div");
             div.className = "learning-goal";
             div.setAttribute("data-subject", x.subject);
+            div.setAttribute("data-keywords", x.keywords.join(","));
+            
+            // Create clickable keyword tags
+            const keywordTags = x.keywords.map(keyword =>
+                `<span class="keyword-tag" onclick="filterByKeyword('${keyword}')">${keyword}</span>`
+            ).join("");
+
             div.innerHTML = `
                 <hr style="background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent);">
                 <h2 style="text-align: center;">${x.title}</h2>
@@ -40,9 +77,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 <div class="profile-container">
                     <div class="profile-card">
-                        <p>Kernwoorden bij dit leerdoel:&nbsp;<b>${x.keywords.join(", ")}</b></p>
-                        <p>
-                            Gemiddelde cijfer: 
+                        <p style="margin-bottom: 10px;">Kernwoorden bij dit leerdoel:</p>
+                        <div class="keywords-container">
+                            ${keywordTags}
+                        </div>
+                        <p style="margin-top: 15px;">
+                            Gemiddelde cijfer:
                             <span class="${((x.avg_kennen + x.avg_kunnen) / 2) >= 5.5 ? "voldoende" : "onvoldoende"}" style="padding: 0 10px;">
                                 <b>${((x.avg_kennen + x.avg_kunnen) / 2).toFixed(1)}</b>
                             </span>
@@ -57,4 +97,11 @@ document.addEventListener("DOMContentLoaded", function () {
     };
     xhr.send();
     select.addEventListener("change", applyFilter);
+    
+    // Add double-click on background to clear keyword filter
+    document.addEventListener("dblclick", function(e) {
+        if (!e.target.classList.contains("keyword-tag")) {
+            clearKeywordFilter();
+        }
+    });
 });

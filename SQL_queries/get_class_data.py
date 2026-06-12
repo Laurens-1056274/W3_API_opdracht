@@ -194,6 +194,6 @@ class GetClassData:
     def _status_for_progress(progress: float) -> str:
         if progress >= 75:
             return "Uitblinker"
-        if progress < 45:
+        if progress < 55:
             return "Achterloopt"
         return "Op schema"

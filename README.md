@@ -81,14 +81,6 @@ Hiervoor dus de hebben we een aantal testusers (er staan meer gebruikers in de d
 | Student | alex@gmail.com | Alex123  |
 
 
-<!-- How to login
+## Cijfervalidatie
 
-first make sure you have the updated database.md. If this is not the case you will not be able to login. To get the latest database.db, run generate
-database.py. If you already have a database.py, delete this first.
-After doing that you can login with:
-    the email of the user: This is the name of user + @gmail.com
-    The password of the user: This is a random password each time you run generate_database.py
-both can be found in the database.db
-
-The email and password shown in the database are examples.
-If the database ever contains real login data, those values should be used instead of the generated ones. -->
+De app gebruikt cijfers van 1-10, waar 5.5 (of 55%) als **voldoende** wordt aangemerkt. De specifieke hoogte van dit getal is echter een _placeholder_ en kan natuurlijk veranderd worden als de opdrachtgever dat wil.

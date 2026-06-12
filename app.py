@@ -37,13 +37,30 @@ def api_student_voortgang():
     student_id = session.get('gebruikers id')
     if not student_id:
         return jsonify({"error": "Niet ingelogd"}), 401
+    
+    subject = request.args.get('subject', '').strip()
+    
     try:
         db = GetStudentData()
-        learning_goals = db.get_learning_goal_overview(int(student_id))
+        learning_goals = db.get_learning_goal_overview(int(student_id), subject if subject else None)
         db.close()
-        return jsonify({"learningGoals": learning_goals})
+        return jsonify({"learningGoals": learning_goals, "subject": subject if subject else "AlleVakken"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@app.route('/api/student/keywords')
+def api_student_keywords():
+    student_id = session.get('gebruikers id')
+    if not student_id:
+        return jsonify({"error": "Niet ingelogd"}), 401
+    try:
+        db = GetStudentData()
+        keywords = db.get_keyword_analysis(int(student_id))
+        db.close()
+        return jsonify({"keywords": keywords})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 
 @app.route('/api/classes')
@@ -92,6 +109,29 @@ def api_class_leerlingen():
         students = db.get_students_overview_for_class(klas)
         db.close()
         return jsonify({"class": klas, "students": students})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/api/class/analyse')
+def api_class_analyse():
+    if not session.get('gebruikers id'):
+        return jsonify({"error": "Niet ingelogd"}), 401
+
+    klas = request.args.get('klas', '').strip()
+    
+    try:
+        db = GetStudentData()
+        data = db.get_class_analysis(klas if klas else None)
+        db.close()
+        return jsonify({
+            "class": klas if klas else "Alle klassen",
+            "data": {
+                "goals": [dict(row) for row in data['goals']],
+                "taxonomy": [dict(row) for row in data['taxonomy']],
+                "keywords": [dict(row) for row in data['keywords']]
+            }
+        })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -176,6 +216,24 @@ def leerdoelen():
         "/pages/leerling/leerdoelen.html",
         user=session["user type"],
         learning_goals=learning_goals)
+
+
+@app.route('/kernwoorden')
+def kernwoorden():
+    try:
+        if session["user type"] == "leerling":
+            pass
+        else:
+            return redirect('/')
+    except:
+        return redirect('/error_page')
+    
+    return render_template(
+        "/pages/leerling/kernwoorden.html",
+        user=session["user type"],
+        name=session.get('gebruikersnaam'),
+        student_id=session.get('gebruikers id')
+    )
 
 
 @app.route('/docentdashboard')
